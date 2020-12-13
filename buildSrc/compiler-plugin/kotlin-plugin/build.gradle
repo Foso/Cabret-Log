@@ -1,0 +1,35 @@
+apply plugin: "org.jetbrains.kotlin.jvm"
+apply plugin: "kotlin-kapt"
+apply plugin: "maven"
+
+
+group = "de.jensklingenberg"
+archivesBaseName = "kotlin-compiler-plugin"
+version = "0.0.1"
+
+install {
+    repositories.mavenInstaller {
+        pom.artifactId = 'kotlin-compiler-plugin'
+    }
+}
+
+repositories {
+    mavenLocal()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    implementation "de.jensklingenberg.mpapt.testAnnotations:annotations-jvm:0.0.1"
+    implementation "org.jetbrains.kotlin:kotlin-gradle-plugin-api"
+    compileOnly "org.jetbrains.kotlin:kotlin-compiler-embeddable"
+//    implementation "org.jetbrains.kotlin:kotlin-platform-api:$kotlin_version"
+    compileOnly "com.google.auto.service:auto-service:1.0-rc6"
+    kapt "com.google.auto.service:auto-service:1.0-rc6"
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}

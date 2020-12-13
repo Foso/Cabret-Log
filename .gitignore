@@ -1,0 +1,12 @@
+/build
+/example/app/build
+/plugin/build
+/plugin/idea
+/example/.gradle
+/plugin/kotlin-compiler-plugin/build
+/plugin/compiler-plugin-shared/build
+/plugin/kotlin-compiler-native-plugin/build
+/plugin/gradle-plugin/build
+/plugin/.idea
+/.gradle
+.idea

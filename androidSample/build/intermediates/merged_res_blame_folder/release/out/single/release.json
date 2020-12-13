@@ -1,0 +1,82 @@
+[
+    {
+        "merged": "/home/jens/Code/2020/JK/Debuglog/untitled1/build/intermediates/res/merged/release/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "/home/jens/Code/2020/JK/Debuglog/untitled1/src/main/res/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/jens/Code/2020/JK/Debuglog/untitled1/build/intermediates/res/merged/release/layout_fragment_second.xml.flat",
+        "source": "/home/jens/Code/2020/JK/Debuglog/untitled1/src/main/res/layout/fragment_second.xml"
+    },
+    {
+        "merged": "/home/jens/Code/2020/JK/Debuglog/untitled1/build/intermediates/res/merged/release/mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "/home/jens/Code/2020/JK/Debuglog/untitled1/src/main/res/mipmap-xhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/home/jens/Code/2020/JK/Debuglog/untitled1/build/intermediates/res/merged/release/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "/home/jens/Code/2020/JK/Debuglog/untitled1/src/main/res/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/jens/Code/2020/JK/Debuglog/untitled1/build/intermediates/res/merged/release/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "/home/jens/Code/2020/JK/Debuglog/untitled1/src/main/res/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/jens/Code/2020/JK/Debuglog/untitled1/build/intermediates/res/merged/release/menu_menu_main.xml.flat",
+        "source": "/home/jens/Code/2020/JK/Debuglog/untitled1/src/main/res/menu/menu_main.xml"
+    },
+    {
+        "merged": "/home/jens/Code/2020/JK/Debuglog/untitled1/build/intermediates/res/merged/release/drawable_ic_launcher_background.xml.flat",
+        "source": "/home/jens/Code/2020/JK/Debuglog/untitled1/src/main/res/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "/home/jens/Code/2020/JK/Debuglog/untitled1/build/intermediates/res/merged/release/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "/home/jens/Code/2020/JK/Debuglog/untitled1/src/main/res/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "/home/jens/Code/2020/JK/Debuglog/untitled1/build/intermediates/res/merged/release/mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "/home/jens/Code/2020/JK/Debuglog/untitled1/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/home/jens/Code/2020/JK/Debuglog/untitled1/build/intermediates/res/merged/release/layout_activity_main.xml.flat",
+        "source": "/home/jens/Code/2020/JK/Debuglog/untitled1/src/main/res/layout/activity_main.xml"
+    },
+    {
+        "merged": "/home/jens/Code/2020/JK/Debuglog/untitled1/build/intermediates/res/merged/release/layout_fragment_first.xml.flat",
+        "source": "/home/jens/Code/2020/JK/Debuglog/untitled1/src/main/res/layout/fragment_first.xml"
+    },
+    {
+        "merged": "/home/jens/Code/2020/JK/Debuglog/untitled1/build/intermediates/res/merged/release/drawable-anydpi-v24_ic_launcher_foreground.xml.flat",
+        "source": "/home/jens/Code/2020/JK/Debuglog/untitled1/build/generated/res/pngs/release/drawable-anydpi-v24/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "/home/jens/Code/2020/JK/Debuglog/untitled1/build/intermediates/res/merged/release/mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "/home/jens/Code/2020/JK/Debuglog/untitled1/src/main/res/mipmap-mdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/home/jens/Code/2020/JK/Debuglog/untitled1/build/intermediates/res/merged/release/layout_content_main.xml.flat",
+        "source": "/home/jens/Code/2020/JK/Debuglog/untitled1/src/main/res/layout/content_main.xml"
+    },
+    {
+        "merged": "/home/jens/Code/2020/JK/Debuglog/untitled1/build/intermediates/res/merged/release/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "/home/jens/Code/2020/JK/Debuglog/untitled1/src/main/res/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/jens/Code/2020/JK/Debuglog/untitled1/build/intermediates/res/merged/release/navigation_nav_graph.xml.flat",
+        "source": "/home/jens/Code/2020/JK/Debuglog/untitled1/src/main/res/navigation/nav_graph.xml"
+    },
+    {
+        "merged": "/home/jens/Code/2020/JK/Debuglog/untitled1/build/intermediates/res/merged/release/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "/home/jens/Code/2020/JK/Debuglog/untitled1/src/main/res/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/home/jens/Code/2020/JK/Debuglog/untitled1/build/intermediates/res/merged/release/mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "/home/jens/Code/2020/JK/Debuglog/untitled1/src/main/res/mipmap-xxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/home/jens/Code/2020/JK/Debuglog/untitled1/build/intermediates/res/merged/release/mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "/home/jens/Code/2020/JK/Debuglog/untitled1/src/main/res/mipmap-hdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "/home/jens/Code/2020/JK/Debuglog/untitled1/build/intermediates/res/merged/release/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "/home/jens/Code/2020/JK/Debuglog/untitled1/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml"
+    }
+]

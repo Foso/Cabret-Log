@@ -1,0 +1,7 @@
+builtins_platform=JS
+unique_name=de.jensklingenberg.mpapt.testAnnotations\:annotations
+compiler_version=1.4.20
+depends=kotlin
+abi_version=1.4.1
+metadata_version=1.4.1
+ir_version=1.0.0

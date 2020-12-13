@@ -1,0 +1,19 @@
+ private fun transformFunction(irSimpleFunction: IrSimpleFunction): IrSimpleFunction {
+        val parent = irSimpleFunction.parent as IrDeclarationContainer
+
+        if ("Jens" == parent.kotlinFqName.shortName().identifier && irSimpleFunction.name.identifier == "toString") {
+
+
+            irSimpleFunction.body?.transformChildrenVoid(object : IrElementTransformerVoid() {
+                override fun visitReturn(expression: IrReturn): IrExpression {
+                    return context.irBuilder(irSimpleFunction.symbol).run {
+                        irReturn(irString("HHgdgddfg   dsgdg dgH"))
+                    }
+                }
+            })
+
+            return irSimpleFunction
+           // declaration.body = newBody
+        }
+        return irSimpleFunction
+    }

@@ -1,0 +1,103 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "url": "../../annotations/0.0.1/annotations-0.0.1.module",
+    "group": "de.jensklingenberg.mpapt.testAnnotations",
+    "module": "annotations",
+    "version": "0.0.1",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.7",
+      "buildId": "52olyybiejcadpuihorikun3r4"
+    }
+  },
+  "variants": [
+    {
+      "name": "jsApiElements-published",
+      "attributes": {
+        "org.gradle.usage": "kotlin-api",
+        "org.jetbrains.kotlin.js.compiler": "ir",
+        "org.jetbrains.kotlin.platform.type": "js"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-js",
+          "version": {
+            "requires": "1.4.20"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-common",
+          "version": {
+            "requires": "1.4.20"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "annotations-js-0.0.1.klib",
+          "url": "annotations-js-0.0.1.klib",
+          "size": 3255,
+          "sha512": "593d06ca1662e90de6eef6dcc61406655c9ebe6d4b069ecd64e6aef728921e4e19b1c050be67df044f72b23f7ef854426074abe34465f2658762f9babe582379",
+          "sha256": "6a0c41741cf0ed364ddd85c37a44b556347f25a8da116ebd2fa9845e39cd7e79",
+          "sha1": "3c5bf7c485856b7e379e18af1402b40614f38256",
+          "md5": "e471a9fdc0763d1726ea87da4fb3614a"
+        }
+      ]
+    },
+    {
+      "name": "jsRuntimeElements-published",
+      "attributes": {
+        "org.gradle.usage": "kotlin-runtime",
+        "org.jetbrains.kotlin.js.compiler": "ir",
+        "org.jetbrains.kotlin.platform.type": "js"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-js",
+          "version": {
+            "requires": "1.4.20"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-common",
+          "version": {
+            "requires": "1.4.20"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "annotations-js-0.0.1.klib",
+          "url": "annotations-js-0.0.1.klib",
+          "size": 3255,
+          "sha512": "593d06ca1662e90de6eef6dcc61406655c9ebe6d4b069ecd64e6aef728921e4e19b1c050be67df044f72b23f7ef854426074abe34465f2658762f9babe582379",
+          "sha256": "6a0c41741cf0ed364ddd85c37a44b556347f25a8da116ebd2fa9845e39cd7e79",
+          "sha1": "3c5bf7c485856b7e379e18af1402b40614f38256",
+          "md5": "e471a9fdc0763d1726ea87da4fb3614a"
+        }
+      ]
+    },
+    {
+      "name": "metadataApiElements-published",
+      "attributes": {
+        "org.gradle.usage": "kotlin-api",
+        "org.jetbrains.kotlin.platform.type": "common"
+      },
+      "available-at": {
+        "url": "../../annotations-metadata/0.0.1/annotations-metadata-0.0.1.module",
+        "group": "de.jensklingenberg.mpapt.testAnnotations",
+        "module": "annotations-metadata",
+        "version": "0.0.1"
+      }
+    }
+  ]
+}

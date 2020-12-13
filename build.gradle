@@ -1,0 +1,126 @@
+buildscript {
+
+    ext.buildMaven = { p -> repositories { maven { url p } } }
+
+
+    repositories {
+        mavenLocal()
+        google()
+        jcenter()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "com.android.tools.build:gradle:4.1.1"
+
+        classpath "de.jensklingenberg:gradle-plugin:1.0.0"
+
+    }
+
+}
+plugins {
+    id 'org.jetbrains.kotlin.multiplatform' version '1.4.20'
+}
+
+
+System.setProperty("kotlin.compiler.execution.strategy", "in-process") // For debugging
+
+allprojects {
+    repositories {
+        google()
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://maven.google.com" }
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+}
+
+
+apply plugin: 'compiler.plugin.helloworld'
+
+
+helloWorld {
+    enabled = true
+}
+
+allprojects {
+    ext.buildMaven = { p -> repositories { maven { url p } } }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://maven.google.com" }
+        maven { url "https://plugins.gradle.org/m2/" }
+        google()
+        jcenter()
+
+
+    }
+}
+
+
+kotlin {
+    jvm(){
+        configure([compilations.main]) {
+            tasks.getByName(compileKotlinTaskName).kotlinOptions {
+                useIR = true
+            }
+        }
+    }
+
+
+
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation kotlin('stdlib-common')
+                implementation project(path: ":annotations")
+            }
+        }
+        commonTest {
+            dependencies {
+                implementation kotlin('test-common')
+                implementation kotlin('test-annotations-common')
+            }
+        }
+
+        jsMain {
+            dependencies {
+                implementation kotlin('stdlib-js')
+            }
+        }
+        jsTest {
+            dependencies {
+                implementation kotlin('test-js')
+            }
+        }
+
+        jvmMain {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+            }
+        }
+        jsTest {
+            dependencies {
+                implementation kotlin('test-js')
+            }
+        }
+        linuxMain {
+
+        }
+        linuxTest {
+        }
+    }
+}
+
+// workaround for https://youtrack.jetbrains.com/issue/KT-27170
+configurations {
+    compileClasspath
+}
+
+build {
+
+
+    dependsOn ':annotations:build'
+}

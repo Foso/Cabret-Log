@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/home/jens/Code/2020/JK/Debuglog/untitled1/build/intermediates/incremental/mergeReleaseResources/stripped.dir/layout/content_main.xml",
+        "source": "/home/jens/Code/2020/JK/Debuglog/untitled1/src/main/res/layout/content_main.xml"
+    },
+    {
+        "merged": "/home/jens/Code/2020/JK/Debuglog/untitled1/build/intermediates/incremental/mergeReleaseResources/stripped.dir/layout/fragment_first.xml",
+        "source": "/home/jens/Code/2020/JK/Debuglog/untitled1/src/main/res/layout/fragment_first.xml"
+    },
+    {
+        "merged": "/home/jens/Code/2020/JK/Debuglog/untitled1/build/intermediates/incremental/mergeReleaseResources/stripped.dir/layout/fragment_second.xml",
+        "source": "/home/jens/Code/2020/JK/Debuglog/untitled1/src/main/res/layout/fragment_second.xml"
+    },
+    {
+        "merged": "/home/jens/Code/2020/JK/Debuglog/untitled1/build/intermediates/incremental/mergeReleaseResources/stripped.dir/layout/activity_main.xml",
+        "source": "/home/jens/Code/2020/JK/Debuglog/untitled1/src/main/res/layout/activity_main.xml"
+    }
+]

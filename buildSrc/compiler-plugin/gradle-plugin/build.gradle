@@ -1,0 +1,32 @@
+apply plugin: "java-gradle-plugin"
+apply plugin: "org.jetbrains.kotlin.jvm"
+apply plugin: "kotlin-kapt"
+apply plugin: "maven"
+
+
+group = "de.jensklingenberg"
+archivesBaseName = "gradle-plugin"
+version = "1.0.0"
+
+
+install {
+    repositories.mavenInstaller {
+        pom.artifactId = 'gradle-plugin'
+    }
+}
+
+gradlePlugin {
+    plugins {
+        simplePlugin {
+            id = "compiler.plugin.helloworld" // users will do `apply plugin: "compiler.plugin.helloworld"`
+            implementationClass = "de.jensklingenberg.gradle.HelloWorldGradlePlugin" // entry-point class
+        }
+    }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-gradle-plugin-api"
+    compileOnly "com.google.auto.service:auto-service:1.0-rc4"
+    kapt "com.google.auto.service:auto-service:1.0-rc4"
+    runtime group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: '1.4.0'
+}
