@@ -1,4 +1,0 @@
-#Sun Dec 13 20:48:32 CET 2020
-base.0=/home/jens/Code/2020/JK/Debuglog/untitled1/build/intermediates/dex/release/mergeDexRelease/classes.dex
-renamed.0=classes.dex
-path.0=classes.dex
