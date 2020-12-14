@@ -65,7 +65,7 @@ class DebugLogTransformer(
             var target = Target.Other
 
             /**
-             * Find the symbol for Log.d()
+             * Find the symbol for Log.d(), we need it to create the irCall
              */
             val typeNullableAny = context.irBuiltIns.anyNType
 
