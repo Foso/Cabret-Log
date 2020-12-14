@@ -124,7 +124,7 @@ class DebugLogTransformer(
 
                                 }
                                 /**
-                                 * Here the add all the other statements of the body, when there are any.
+                                 * Here we add all the other statements of the body, when there are any.
                                  */
                                 statements += irSimpleFunction.body?.statements ?: emptyList()
                             }
