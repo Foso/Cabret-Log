@@ -1,4 +1,17 @@
-WIP
+
+<h1 align="center">DebugLog </h1>
+
+[![jCenter](https://img.shields.io/badge/Apache-2.0-green.svg
+)](https://github.com/Foso/DebugLog/blob/master/LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+[![jCenter](https://img.shields.io/badge/Kotlin-1.4.20-green.svg
+)](https://github.com/Foso/Sheasy/blob/master/LICENSE)
+
+
+
+## Introduction 🙋‍♂️
+
+ This is an Kotlin Compiler Plugin that enables Annotation-triggered method call logging. 
 
 ### Find this project useful ? :heart:
 * Support it by clicking the :star: button on the upper right of this page. :v:
