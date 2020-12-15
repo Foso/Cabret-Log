@@ -32,6 +32,8 @@ It will log:
 ```kotlin
 doSomething() name: Jens age: 31 isLoggedIn: false
 ```
+## How does it work?
+At compiling, the compiler plugin checks in the IrGeneration Phase for the @DebugLog annotation. Then it rewrites the body the function. 
 
 
 ### Find this project useful ? :heart:
