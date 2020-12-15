@@ -21,9 +21,9 @@ compileTestKotlin {
 
 build {
     dependsOn ':annotations:build'
+    dependsOn ':gradle-plugin:install'
 
     dependsOn ':compiler-plugin:kotlin-plugin:install'
     dependsOn ':compiler-plugin:kotlin-native-plugin:install'
 
-    dependsOn ':compiler-plugin:gradle-plugin:install'
 }
