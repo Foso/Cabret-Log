@@ -58,7 +58,16 @@ In Android builds it will use **Log.d** instead of **println**
 
 This rewrite will only happen inside the compiler plugin at compile time. No .kt/source files will be changed.
 
+### 👷 Project Structure
+* <kbd>androidSample</kbd> - A basic Android app that is using the debuglog compiler plugin
+* <kbd>src</kbd> - A Kotlin Multiplatform project that is using the debuglog compiler plugin
 
+
+#### buildSrc
+ *  <kbd>kotlin-compiler-native-plugin</kbd> - This module contains the Kotlin Compiler Plugin for native targets
+ *  <kbd>kotlin-compiler-plugin</kbd> - This module contains the Kotlin Compiler Plugin for JVM/JS targets
+ *  <kbd>gradle-plugin</kbd> - This module contains the gradle plugin which trigger the two compiler plugins
+ *  <kbd>annotations</kbd> - This module contains the debuglog annotations
 
 ### Find this project useful ? :heart:
 * Support it by clicking the :star: button on the upper right of this page. :v:
