@@ -13,11 +13,11 @@
 
 This is an Kotlin Compiler Plugin that enables Annotation-triggered method call logging. 
  
-Simply add @DebugLog to your methods and it will automatically log all arguments that are passed to the function.
+Simply add **@DebugLog** to your methods and it will automatically log all arguments that are passed to the function.
 
 ```kotlin
 @DebugLog
-fun doSomething(name: String, age: Int, isLoggedIn:Boolean=false) {
+fun doSomething(name: String, age: Int, isLoggedIn: Boolean = false) {
     //Do something
 }
 ```
