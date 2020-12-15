@@ -22,7 +22,7 @@ plugins {
 
 }
 
-group = "de.jensklingenberg.mpapt.testAnnotations"
+group = "de.jensklingenberg.debuglog.testAnnotations"
 
 version = "0.0.1"
 

@@ -97,7 +97,7 @@ kotlin {
         jvmMain {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-                implementation "de.jensklingenberg.mpapt.testAnnotations:annotations-jvm:0.0.1"
+                implementation "de.jensklingenberg.debuglog.testAnnotations:annotations-jvm:0.0.1"
 
             }
         }

@@ -20,7 +20,7 @@ compileTestKotlin {
 }
 
 build {
-    dependsOn ':compiler-plugin:annotations:build'
+    dependsOn ':annotations:build'
 
     dependsOn ':compiler-plugin:kotlin-plugin:install'
     dependsOn ':compiler-plugin:kotlin-native-plugin:install'
