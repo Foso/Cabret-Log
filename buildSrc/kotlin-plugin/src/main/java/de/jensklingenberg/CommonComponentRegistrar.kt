@@ -17,6 +17,7 @@ class CommonComponentRegistrar : ComponentRegistrar {
             configuration: CompilerConfiguration
     ) {
 
+
         if (configuration[KEY_ENABLED] == false) {
             return
         }

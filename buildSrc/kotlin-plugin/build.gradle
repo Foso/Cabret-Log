@@ -23,7 +23,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-gradle-plugin-api"
     compileOnly "org.jetbrains.kotlin:kotlin-compiler-embeddable"
 //    implementation "org.jetbrains.kotlin:kotlin-platform-api:$kotlin_version"
-    annotationProcessor "com.google.auto.service:auto-service:1.0-rc6"
+    compileOnly "com.google.auto.service:auto-service:1.0-rc6"
     kapt "com.google.auto.service:auto-service:1.0-rc6"
 }
 

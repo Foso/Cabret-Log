@@ -1,7 +1,6 @@
 package de.jensklingenberg.debuglog
 
 import de.jensklingenberg.common.runOnFileInOrder
-import de.jensklingenberg.debuglog.DebugLogTransformer
 
 import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
