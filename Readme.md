@@ -69,6 +69,12 @@ This rewrite will only happen inside the compiler plugin at compile time. No .kt
  *  <kbd>gradle-plugin</kbd> - This module contains the gradle plugin which trigger the two compiler plugins
  *  <kbd>annotations</kbd> - This module contains the debuglog annotations
 
+## Usage
+For now the plugin only exists in this project. Maybe i will upload it to MavenCentral, when i make some more changes.
+
+If you want to try it you can:
+Run the Android app inside androidSample or run the main() inside /src
+
 ### Find this project useful ? :heart:
 * Support it by clicking the :star: button on the upper right of this page. :v:
 
