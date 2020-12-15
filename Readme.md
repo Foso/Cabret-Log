@@ -35,6 +35,25 @@ doSomething() name: Jens age: 31 isLoggedIn: false
 ## How does it work?
 At compiling, the compiler plugin checks in the IrGeneration Phase for the @DebugLog annotation. Then it rewrites the body the function. 
 
+The function:
+
+```kotlin
+@DebugLog
+fun doSomething(name: String, age: Int, isLoggedIn: Boolean = false) {
+    //Do something
+}
+```
+
+will be rewritten to:
+
+```kotlin
+@DebugLog
+fun doSomething(name: String, age: Int, isLoggedIn: Boolean = false) {
+    println("doSomething() name: $name age: $age isLoggedIn: $isLoggedIn"
+    //Do something
+}
+```
+
 
 ### Find this project useful ? :heart:
 * Support it by clicking the :star: button on the upper right of this page. :v:
