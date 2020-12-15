@@ -1,3 +1,5 @@
+include ':compiler-plugin:annotations'
+
 include ':compiler-plugin:kotlin-plugin'
 include ':compiler-plugin:kotlin-native-plugin'
 
