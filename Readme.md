@@ -33,7 +33,7 @@ It will log:
 doSomething() name: Jens age: 31 isLoggedIn: false
 ```
 ## How does it work?
-At compiling, the compiler plugin checks in the IrGeneration Phase for the @DebugLog annotation. Then it rewrites the body the function. 
+At compiling, the compiler plugin checks in the IrGeneration Phase for the @DebugLog annotation. Then it [rewrites the body the function](https://github.com/Foso/DebugLog/blob/6152ffe4a516010a029c2956f8f1ae878712030e/buildSrc/kotlin-plugin/src/main/java/de/jensklingenberg/debuglog/DebugLogTransformer.kt#L90). 
 
 The function:
 
@@ -53,6 +53,11 @@ fun doSomething(name: String, age: Int, isLoggedIn: Boolean = false) {
     //Do something
 }
 ```
+
+In Android builds it will use **Log.d** instead of **println**
+
+This rewrite will only happen inside the compiler plugin at compile time. No .kt/source files will be changed.
+
 
 
 ### Find this project useful ? :heart:
