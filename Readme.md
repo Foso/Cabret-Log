@@ -49,7 +49,7 @@ will be rewritten to:
 ```kotlin
 @DebugLog
 fun doSomething(name: String, age: Int, isLoggedIn: Boolean = false) {
-    println("doSomething() name: $name age: $age isLoggedIn: $isLoggedIn"
+    kotlin.io.println("doSomething() name: $name age: $age isLoggedIn: $isLoggedIn"
     //Do something
 }
 ```
