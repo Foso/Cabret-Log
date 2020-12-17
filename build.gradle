@@ -118,9 +118,3 @@ kotlin {
 configurations {
     compileClasspath
 }
-
-build {
-
-
-    dependsOn ':annotations:build'
-}

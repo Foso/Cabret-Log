@@ -1,6 +1,8 @@
 package sample
 
 import de.jensklingenberg.testAnnotations.DebugLog
+import de.jensklingenberg.testAnnotations.DebuglogHandler
+
 
 data class Jens(val name: String) {
 
@@ -9,10 +11,10 @@ data class Jens(val name: String) {
         return "ddd"
     }
 
-    @DebugLog
-    fun addPrint(test: String, name: Int, te: String = "hhaa",wuhu:String) {
-
-    }
 
 }
 
+@DebugLog
+fun doSomething(name: String, age: Int = 5): Int {
+  return age
+}

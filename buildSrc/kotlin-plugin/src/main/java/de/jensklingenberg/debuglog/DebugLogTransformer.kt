@@ -3,6 +3,8 @@ package de.jensklingenberg.debuglog
 
 import de.jensklingenberg.common.irBuilder
 import de.jensklingenberg.testAnnotations.DebugLog
+import de.jensklingenberg.testAnnotations.DebuglogHandler
+import de.jensklingenberg.testAnnotations.IrDump
 import org.jetbrains.kotlin.backend.common.FileLoweringPass
 import org.jetbrains.kotlin.backend.common.IrElementTransformerVoidWithContext
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
@@ -14,9 +16,12 @@ import org.jetbrains.kotlin.ir.declarations.IrFile
 import org.jetbrains.kotlin.ir.declarations.IrSimpleFunction
 import org.jetbrains.kotlin.ir.declarations.path
 import org.jetbrains.kotlin.ir.expressions.IrTypeOperator
+import org.jetbrains.kotlin.ir.expressions.impl.IrGetEnumValueImpl
+import org.jetbrains.kotlin.ir.interpreter.toIrConst
 import org.jetbrains.kotlin.ir.symbols.IrClassSymbol
 import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
 import org.jetbrains.kotlin.ir.util.IdSignature
+import org.jetbrains.kotlin.ir.util.dump
 import org.jetbrains.kotlin.ir.util.functions
 import org.jetbrains.kotlin.ir.util.hasAnnotation
 import org.jetbrains.kotlin.ir.util.statements
@@ -38,6 +43,9 @@ class DebugLogTransformer(
     }
 
     override fun visitSimpleFunction(declaration: IrSimpleFunction): IrStatement {
+        if(declaration.hasAnnotation(FqName(IrDump::class.java.name))){
+            println(declaration.dump())
+        }
 
         if (validateSignature(declaration)) {
             return super.visitSimpleFunction(transformFunction(declaration))
@@ -58,9 +66,13 @@ class DebugLogTransformer(
     }
 
     private fun transformFunction(irSimpleFunction: IrSimpleFunction): IrSimpleFunction {
+        val tt = context.referenceClass(FqName("de.jensklingenberg.testAnnotations.DebuglogHandler"))
+      val ter= tt?.getFunctions("onLog")?.first { it.owner.valueParameters.size == 2 } ?: return irSimpleFunction
+
 
         if (irSimpleFunction.hasAnnotation(FqName(debugLogAnnoation))) {
             val typeUnit = context.irBuiltIns.unitType
+
 
             var target = Target.Other
 
@@ -79,72 +91,14 @@ class DebugLogTransformer(
                 target = Target.Android
             }
 
+
             when (target) {
-                Target.Android -> {
-                    funLogD ?: return irSimpleFunction
 
-                    /**
-                     * Here we rewrite the body of the annotated function
-                     */
-
-                    irSimpleFunction.body = context.irFactory.createBlockBody(UNDEFINED_OFFSET, UNDEFINED_OFFSET) {
-
-                        with(context.irBuilder(irSimpleFunction.symbol)) {
-                            irBlockBody {
-                                statements += buildStatement(UNDEFINED_OFFSET, UNDEFINED_OFFSET) {
-                                    /**
-                                     * Here we create an the irCall for Log.d()
-                                     * The first argument is the name of containing class
-                                     * The second argument is a String with the name and value of every function
-                                     * parameter.
-                                     * Example:
-                                     * For: fun exampleLog(name:String, age: Int)
-                                     * This String will be passed to Log.d: "name: $name age: $age"
-                                     */
-
-                                    val argCall = irCall(
-                                            funLogD
-                                    ).apply {
-                                        putValueArgument(0, irString("MyFirstFragment"))
-
-                                        val conc = irConcat()
-                                        irSimpleFunction.valueParameters.forEach {
-                                            conc.addArgument(irString(" " + it.name.asString() + ": "))
-                                            conc.addArgument(irGet(it))
-                                        }
-
-                                        putValueArgument(1, conc)
-                                    }
-                                    typeOperator(
-                                            typeOperator = IrTypeOperator.IMPLICIT_COERCION_TO_UNIT,
-                                            resultType = typeUnit,
-                                            argument = argCall,
-                                            typeOperand = typeUnit
-                                    )
-
-                                }
-                                /**
-                                 * Here we add all the other statements of the body, when there are any.
-                                 */
-                                statements += irSimpleFunction.body?.statements ?: emptyList()
-                            }
-                        }
-
-
-                    }
-
-                }
                 Target.Other -> {
 
                     /**
                      * Find the symbol for printLn()
                      */
-
-                    val funPrintln = context.referenceFunctions(FqName("kotlin.io.println"))
-                            .single {
-                                val parameters = it.owner.valueParameters
-                                parameters.size == 1 && parameters[0].type == typeNullableAny
-                            }
 
                     irSimpleFunction.body = context.irFactory.createBlockBody(UNDEFINED_OFFSET, UNDEFINED_OFFSET) {
 
@@ -153,15 +107,19 @@ class DebugLogTransformer(
                                 statements += buildStatement(UNDEFINED_OFFSET, UNDEFINED_OFFSET) {
 
                                     irCall(
-                                            funPrintln
+                                        ter
                                     ).apply {
                                         val conc = irConcat()
+
                                         irSimpleFunction.valueParameters.forEach {
                                             conc.addArgument(irString(" " + it.name.asString() + ": "))
                                             conc.addArgument(irGet(it))
                                         }
-
+                                        this.dispatchReceiver= irGetObject(tt!!)
                                         this.putValueArgument(0, conc)
+                                        this.putValueArgument(1, irString(DebuglogHandler.Servity.DEBUG.name))
+
+                                        //  this.putValueArgument(1, irString("DEBUG"))
 
                                     }
 

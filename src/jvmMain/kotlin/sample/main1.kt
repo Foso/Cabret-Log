@@ -1,8 +1,22 @@
 package sample.example2
 
-import sample.Jens
+import de.jensklingenberg.testAnnotations.DebuglogHandler
+import de.jensklingenberg.testAnnotations.IrDump
 
-fun main(){
-   Jens("jkjk").addPrint("Hallo",4,wuhu="wuhu")
 
+import sample.doSomething
+
+
+fun test(){
+  doSomething("Jens")
+}
+
+fun main() {
+    DebuglogHandler.addListener(object :DebuglogHandler.Listener{
+        override fun log(name: String, servity: DebuglogHandler.Servity) {
+
+            println("HEY! "  +name)
+        }
+    })
+   test()
 }

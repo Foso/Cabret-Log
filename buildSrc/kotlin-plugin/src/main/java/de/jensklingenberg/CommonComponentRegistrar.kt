@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.com.intellij.mock.MockProject
 import org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar
 import org.jetbrains.kotlin.config.CompilerConfiguration
 
-
+//context.referenceClass(FqName("de.jensklingenberg.testAnnotations.DebuglogHandler")).functions.toList()
 @AutoService(ComponentRegistrar::class)
 class CommonComponentRegistrar : ComponentRegistrar {
     override fun registerProjectComponents(
