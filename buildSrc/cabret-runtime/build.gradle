@@ -1,15 +1,22 @@
-apply plugin: "org.jetbrains.kotlin.jvm"
+
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+
+    id 'maven-publish'
+
+}
+
 apply plugin: "kotlin-kapt"
 apply plugin: "maven"
 
 
 group = "de.jensklingenberg"
-archivesBaseName = "kotlin-compiler-native-plugin"
+archivesBaseName = "cabret-runtime"
 version = "0.0.1"
 
 install {
     repositories.mavenInstaller {
-        pom.artifactId = 'kotlin-compiler-native-plugin'
+        pom.artifactId = archivesBaseName
     }
 }
 
@@ -18,11 +25,13 @@ repositories {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib"
-    implementation "org.jetbrains.kotlin:kotlin-gradle-plugin-api"
-    compileOnly "org.jetbrains.kotlin:kotlin-compiler"
+    compileOnly "org.jetbrains.kotlin:kotlin-compiler-embeddable"
+
+    compileOnly "org.jetbrains.kotlin:kotlin-stdlib"
     compileOnly "com.google.auto.service:auto-service:1.0-rc6"
     kapt "com.google.auto.service:auto-service:1.0-rc6"
+    implementation "de.jensklingenberg.debuglog.testAnnotations:annotations-jvm:0.0.1"
+
 }
 
 compileKotlin {
@@ -31,3 +40,4 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
+build.finalizedBy(install)

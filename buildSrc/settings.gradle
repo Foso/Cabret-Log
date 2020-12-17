@@ -1,6 +1,8 @@
 include ':annotations'
+include ':cabret-runtime'
 
 include ':kotlin-plugin'
 include ':compiler-plugin:kotlin-native-plugin'
 
 include ':gradle-plugin'
+

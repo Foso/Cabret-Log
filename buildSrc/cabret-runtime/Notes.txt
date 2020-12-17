@@ -1,0 +1,76 @@
+//Remove a function
+Remove it from declarations
+
+FUN name:toString visibility:public modality:OPEN <> ($this:sample.Jens) returnType:kotlin.String
+  overridden:
+    public open fun toString (): kotlin.String declared in kotlin.Any
+  $this: VALUE_PARAMETER name:<this> type:sample.Jens
+  BLOCK_BODY
+    CALL 'public final fun print (message: kotlin.Any?): kotlin.Unit [inline] declared in kotlin.io.ConsoleKt' type=kotlin.Unit origin=null
+      message: CONST String type=kotlin.String value="What"
+    RETURN type=kotlin.Nothing from='public open fun toString (): kotlin.String declared in sample.Jens'
+      CONST String type=kotlin.String value="ddd"
+
+
+//
+Rewrite a return expression
++
+      override fun visitReturn(expression: IrReturn): IrExpression {
+
+                           context.irBuilder(irSimpleFunction.symbol).run {
+                               val irConcat = irConcat()
+
+                               (expression.value as IrStringConcatenation).arguments.forEach {
+
+                                   if(it is IrGetField){
+                                      val correspondingPropertyName = (it as IrGetFieldImpl).symbol.owner.name.asString()
+                                       if(correspondingPropertyName=="name"){
+                                           irConcat.addArgument(irString("XXX"))
+                                       }else{
+                                           irConcat.addArgument(it)
+                                       }
+                                   }else{
+                                       irConcat.addArgument(it)
+                                   }
+                               }
+                               irConcat.addArgument(irString("Now this is not interesting"))
+                            return  irReturn(irConcat)
+                          }
+
+
+                      }
+
+
+                      //BUild signature
+                      val isig = IdSignature.PublicSignature(
+                                                                  packageFqName = "kotlin.io",
+                                                                  "print",
+                                                                  null,
+                                                                  0
+                                                              )
+
+
+
+                                                              /////////////////////////
+                                                                    val arg : IrExpression = run{
+                                                                                              val conc = irConcat()
+                                                                                              irSimpleFunction.valueParameters.forEach {
+                                                                                                  conc.addArgument(irString(" " + it.name.asString() + ": "))
+                                                                                                  conc.addArgument(irGet(it))
+                                                                                              }
+                                                                                              conc
+                                                                                          }
+
+                                                                                          this.typeOperator(typeOperator = IrTypeOperator.IMPLICIT_COERCION_TO_UNIT,resultType = typeUnit,argument = arg,typeOperand = typeUnit)
+
+
+
+                                                                                          //
+                                                                                          BLOCK_BODY
+                                                                                            TYPE_OP type=kotlin.Unit origin=IMPLICIT_COERCION_TO_UNIT typeOperand=kotlin.Unit
+                                                                                              CALL 'public open fun d (p0: @[EnhancedNullability] kotlin.String?, p1: @[EnhancedNullability] kotlin.String): kotlin.Int declared in android.util.Log' type=kotlin.Int origin=null
+                                                                                                p0: CONST String type=kotlin.String value="MyFirstFragment"
+                                                                                                p1: CONST String type=kotlin.String value="MyFirstFragment"
+
+p0 =    this.putValueArgument(0, irString("MyFirstFragment"))
+p1 =  this.putValueArgument(1, irString("MyFirstFragment"))

@@ -1,7 +1,8 @@
 package de.jensklingenberg
 
 import com.google.auto.service.AutoService
-import de.jensklingenberg.debuglog.MyIrGenerationExtension3
+import de.jensklingenberg.debuglog.MyIrGenerationExtension
+
 import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
@@ -24,7 +25,7 @@ class CommonComponentRegistrar : ComponentRegistrar {
         val messageCollector = configuration.get(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY, MessageCollector.NONE)
 
         //Debuglog
-        IrGenerationExtension.registerExtension(project, MyIrGenerationExtension3(messageCollector))
+        IrGenerationExtension.registerExtension(project, MyIrGenerationExtension(messageCollector))
 
     }
 }
