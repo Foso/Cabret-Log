@@ -14,7 +14,7 @@ data class Jens(val name: String) {
 
 }
 
-@DebugLog
+
 fun doSomething(name: String, age: Int = 5): Int {
   return age
 }

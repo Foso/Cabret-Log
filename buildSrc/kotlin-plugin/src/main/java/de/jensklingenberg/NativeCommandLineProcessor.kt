@@ -12,7 +12,12 @@ class NativeCommandLineProcessor : CommandLineProcessor {
 
     override val pluginId: String = "helloWorldPlugin"
 
-    override val pluginOptions: Collection<CliOption> = emptyList()
+    override val pluginOptions: Collection<CliOption> = listOf(
+        CliOption(
+            optionName = "enabled", valueDescription = "<true|false>",
+            description = "peoppp"
+        )
+    )
 
     override fun processOption(
         option: AbstractCliOption,

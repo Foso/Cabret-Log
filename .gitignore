@@ -10,3 +10,4 @@
 /plugin/.idea
 /.gradle
 .idea
+/example/build/

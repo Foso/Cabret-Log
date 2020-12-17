@@ -11,7 +11,6 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinGradleSubplugin
 import org.jetbrains.kotlin.gradle.plugin.SubpluginArtifact
 import org.jetbrains.kotlin.gradle.plugin.SubpluginOption
 
-@AutoService(HelloWorldGradleSubplugin::class)
 class HelloWorldGradleSubplugin : KotlinCompilerPluginSupportPlugin {
 
     companion object {
@@ -24,7 +23,8 @@ class HelloWorldGradleSubplugin : KotlinCompilerPluginSupportPlugin {
         val project = kotlinCompilation.target.project
 
         return project.provider {
-            val options = mutableListOf<SubpluginOption>()
+
+            val options = mutableListOf<SubpluginOption>(SubpluginOption("enabled","true"))
             options
         }
     }
