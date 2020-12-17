@@ -12,21 +12,14 @@ class NativeCommandLineProcessor : CommandLineProcessor {
 
     override val pluginId: String = "helloWorldPlugin"
 
-    override val pluginOptions: Collection<CliOption> = listOf(
-        CliOption(
-            optionName = "enabled", valueDescription = "<true|false>",
-            description = "whether to enable the plugin or not"
-        )
-    )
+    override val pluginOptions: Collection<CliOption> = emptyList()
 
     override fun processOption(
         option: AbstractCliOption,
         value: String,
         configuration: CompilerConfiguration
-    ) = when (option.optionName) {
-        "enabled" -> configuration.put(KEY_ENABLED, value.toBoolean())
-        else -> configuration.put(KEY_ENABLED, true)
-    }
+    ) =  configuration.put(KEY_ENABLED, true)
+
 }
 
 val KEY_ENABLED = CompilerConfigurationKey<Boolean>("whether the plugin is enabled")

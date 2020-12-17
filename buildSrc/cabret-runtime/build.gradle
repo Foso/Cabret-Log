@@ -40,4 +40,10 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
-build.finalizedBy(install)
+
+
+build{
+    dependsOn ':annotations:build'
+
+    finalizedBy(install)
+}

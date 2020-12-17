@@ -34,7 +34,8 @@ repositories {
 kotlin {
     jvm()
     js(IR){
-
+        browser()
+        nodejs()
     }
     linuxX64("linux")
 

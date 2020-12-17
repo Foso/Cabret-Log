@@ -70,10 +70,10 @@ class DebugLogTransformer(
     }
 
     private fun transformFunction(irSimpleFunction: IrSimpleFunction): IrSimpleFunction {
-        val tt = context.referenceClass(FqName("de.jensklingenberg.testAnnotations.DebuglogHandler"))
+        val cabretLogHandlerSymbol: IrClassSymbol? = context.referenceClass(FqName(DebuglogHandler::class.java.name))
         val irFactory = context.irFactory
 
-        val ter = tt?.getFunctions("onLog")?.first { it.owner.valueParameters.size == 2 } ?: return irSimpleFunction
+        val ter = cabretLogHandlerSymbol?.getFunctions("onLog")?.first { it.owner.valueParameters.size == 2 } ?: return irSimpleFunction
 
 
         if (irSimpleFunction.hasAnnotation(FqName(debugLogAnnoation))) {
@@ -121,7 +121,7 @@ class DebugLogTransformer(
                                             conc.addArgument(irString(" " + it.name.asString() + ": "))
                                             conc.addArgument(irGet(it))
                                         }
-                                        this.dispatchReceiver = irGetObject(tt!!)
+                                        this.dispatchReceiver = irGetObject(cabretLogHandlerSymbol!!)
                                         this.putValueArgument(0, conc)
                                         this.putValueArgument(1, irString(DebuglogHandler.Servity.DEBUG.name))
 
