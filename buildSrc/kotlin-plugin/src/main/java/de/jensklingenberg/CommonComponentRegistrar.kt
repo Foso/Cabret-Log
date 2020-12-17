@@ -19,7 +19,7 @@ class CommonComponentRegistrar : ComponentRegistrar {
     ) {
 
         if (configuration[KEY_ENABLED] == false) {
-            //return
+            return
         }
         val messageCollector = configuration.get(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY, MessageCollector.NONE)
 

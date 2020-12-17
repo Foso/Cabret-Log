@@ -2,12 +2,10 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
 }
-apply plugin: 'compiler.plugin.helloworld'
+apply plugin: 'de.jensklingenberg.cabret'
 
 
-helloWorld {
-    enabled = true
-}
+
 android {
     compileSdkVersion 30
 

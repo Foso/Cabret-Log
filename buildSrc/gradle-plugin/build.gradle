@@ -4,12 +4,11 @@ plugins {
     id 'com.gradle.plugin-publish' version '0.10.1'
 }
 apply plugin: "java-gradle-plugin"
-apply plugin: "kotlin-kapt"
 apply plugin: "maven"
 
 
 group = "de.jensklingenberg"
-archivesBaseName = "gradle-plugin"
+archivesBaseName = "cabret-gradle"
 version = "1.0.0"
 
 
@@ -23,17 +22,14 @@ install {
 gradlePlugin {
     plugins {
         simplePlugin {
-            id = "compiler.plugin.helloworld" // users will do `apply plugin: "compiler.plugin.helloworld"`
-            implementationClass = "de.jensklingenberg.gradle.HelloWorldGradleSubplugin" // entry-point class
+            id = "de.jensklingenberg.cabret" // users will do `apply plugin: "de.jensklingenberg.cabret"`
+            implementationClass = "de.jensklingenberg.gradle.CabretGradleSubplugin" // entry-point class
         }
     }
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    compile "org.jetbrains.kotlin:kotlin-gradle-plugin-api:1.4.20"
-    compileOnly "com.google.auto.service:auto-service:1.0-rc6"
-    kapt "com.google.auto.service:auto-service:1.0-rc6"
+    compile "org.jetbrains.kotlin:kotlin-gradle-plugin-api:1.4.21"
 }
 
 

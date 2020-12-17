@@ -13,14 +13,13 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:4.0.2"
         classpath 'com.github.jengelman.gradle.plugins:shadow:5.0.0'
-
-        classpath "de.jensklingenberg:gradle-plugin:1.0.0"
+        classpath "de.jensklingenberg:cabret-gradle:1.0.0"
 
     }
 
 }
 plugins {
-    id 'org.jetbrains.kotlin.multiplatform' version '1.4.20' apply false
+    id 'org.jetbrains.kotlin.multiplatform' version '1.4.21' apply false
 }
 
 
