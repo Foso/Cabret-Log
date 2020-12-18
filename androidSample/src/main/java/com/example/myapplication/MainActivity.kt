@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -10,6 +11,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import com.example.myapplication.databinding.ActivityMainBinding
+import de.jensklingenberg.testAnnotations.DebuglogHandler
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,6 +21,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        DebuglogHandler.addListener(object :DebuglogHandler.Listener{
+            override fun log(name: String, servity: DebuglogHandler.Servity) {
+                Log.d("HALLO1",name)
+
+            }
+        })
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

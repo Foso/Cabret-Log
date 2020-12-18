@@ -2,19 +2,20 @@ package sample
 
 import de.jensklingenberg.testAnnotations.DebugLog
 import de.jensklingenberg.testAnnotations.DebuglogHandler
+import de.jensklingenberg.testAnnotations.IrDump
 
 
 data class Jens(val name: String) {
 
-    override fun toString(): String {
 
-        return "ddd"
-    }
 
 
 }
 
-@DebugLog
-fun doSomething(name: String, age: Int = 5): Int {
-  return age
+@IrDump
+@DebugLog(logReturn = true)
+fun doSomething(name: String, age: Int = 5): Jens {
+
+    return Jens("KORO")
 }
+

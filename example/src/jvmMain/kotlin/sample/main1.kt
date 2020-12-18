@@ -8,15 +8,10 @@ import sample.doSomething
 
 
 fun test(){
-  doSomething("Jens")
+   doSomething("Jens")
 }
 
 fun main() {
-    DebuglogHandler.addListener(object :DebuglogHandler.Listener{
-        override fun log(name: String, servity: DebuglogHandler.Servity) {
 
-            println("HEY! "  +name)
-        }
-    })
    test()
 }

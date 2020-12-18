@@ -4,7 +4,9 @@ plugins {
 }
 apply plugin: 'de.jensklingenberg.cabret'
 
-
+cabret {
+    enabled = true
+}
 
 android {
     compileSdkVersion 30
@@ -39,7 +41,7 @@ android {
 }
 
 dependencies {
-
+    implementation project(":annotations")
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.4.21"
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
@@ -47,7 +49,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.2'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.2'
-    implementation "de.jensklingenberg.debuglog.testAnnotations:annotations-jvm:0.0.1"
+   // implementation "de.jensklingenberg.debuglog.testAnnotations:annotations-jvm:0.0.1"
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

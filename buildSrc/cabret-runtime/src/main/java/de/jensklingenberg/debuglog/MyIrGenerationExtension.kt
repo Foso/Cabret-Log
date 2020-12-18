@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.ir.declarations.IrModuleFragment
 class MyIrGenerationExtension(private val messageCollector: MessageCollector) : IrGenerationExtension {
     override fun generate(moduleFragment: IrModuleFragment, pluginContext: IrPluginContext) {
         for (file in moduleFragment.files) {
-            DebugLogTransformer(pluginContext, messageCollector).runOnFileInOrder(file)
+            CabretLogTransformer(pluginContext, messageCollector,pluginContext.irFactory).runOnFileInOrder(file)
         }
 
     }

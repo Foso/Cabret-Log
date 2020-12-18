@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.config.CompilerConfigurationKey
 @AutoService(CommandLineProcessor::class) // don't forget!
 class NativeCommandLineProcessor : CommandLineProcessor {
 
-    override val pluginId: String = "helloWorldPlugin"
+    override val pluginId: String = "cabretPlugin"
 
     override val pluginOptions: Collection<CliOption> = listOf(
         CliOption(

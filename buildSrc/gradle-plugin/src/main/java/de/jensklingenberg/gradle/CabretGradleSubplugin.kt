@@ -42,7 +42,7 @@ class CabretGradleSubplugin : KotlinCompilerPluginSupportPlugin {
     /**
      * Just needs to be consistent with the key for CommandLineProcessor#pluginId
      */
-    override fun getCompilerPluginId(): String = "helloWorldPlugin"
+    override fun getCompilerPluginId(): String = "cabretPlugin"
 
     override fun getPluginArtifact(): SubpluginArtifact = SubpluginArtifact(
         groupId = SERIALIZATION_GROUP_NAME,

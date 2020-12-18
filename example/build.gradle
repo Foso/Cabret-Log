@@ -23,14 +23,14 @@ cabret {
 }
 
 kotlin {
-    jvm(){
+    jvm() {
         configure([compilations.main]) {
             tasks.getByName(compileKotlinTaskName).kotlinOptions {
                 useIR = true
             }
         }
     }
-    js(IR){
+    js(IR) {
         nodejs {
         }
         binaries.executable()
@@ -81,10 +81,18 @@ kotlin {
         }
         linuxTest {
         }
+        androidMain {
+            dependencies {
+                implementation("com.google.android.material:material:1.2.0")
+            }
+        }
     }
 }
-
 // workaround for https://youtrack.jetbrains.com/issue/KT-27170
 configurations {
     compileClasspath
+}
+build {
+    dependsOn ':annotations:build'
+
 }

@@ -1,5 +1,8 @@
 buildscript {
 
+    ext {
+        kotlin_version = '1.4.10'
+    }
     ext.buildMaven = { p -> repositories { maven { url p } } }
 
 
@@ -14,6 +17,7 @@ buildscript {
         classpath "com.android.tools.build:gradle:4.0.2"
         classpath 'com.github.jengelman.gradle.plugins:shadow:5.0.0'
         classpath "de.jensklingenberg:cabret-gradle:1.0.0"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
     }
 

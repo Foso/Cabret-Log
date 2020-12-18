@@ -1,26 +1,13 @@
-buildscript {
-
-    ext.buildMaven = { p -> repositories { maven { url p } } }
-
-
-    repositories {
-        mavenLocal()
-        google()
-        jcenter()
-        mavenCentral()
-    }
-
-    dependencies {
-    }
-
-}
 
 plugins {
-    id 'org.jetbrains.kotlin.multiplatform'
+
     id "maven"
     id("maven-publish")
 
+
 }
+apply plugin: 'kotlin-multiplatform'
+apply plugin: 'com.android.library'
 
 group = "de.jensklingenberg.debuglog.testAnnotations"
 
@@ -28,16 +15,21 @@ version = "0.0.1"
 
 
 repositories {
+    google()
     mavenCentral()
 }
 
 kotlin {
+
     jvm()
     js(IR){
         browser()
         nodejs()
     }
     linuxX64("linux")
+    android() {
+        // publishLibraryVariants("release", "debug")
+    }
 
     sourceSets {
         commonMain {
@@ -75,11 +67,43 @@ kotlin {
                 implementation kotlin('test-js')
             }
         }
+        androidMain{
+
+        }
 
     }
 }
 
 
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName '0.1'
+        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+    }
+    sourceSets {
+        main {
+            manifest.srcFile 'src/androidMain/AndroidManifest.xml'
+            java.srcDirs = ['src/androidMain/kotlin']
+            res.srcDirs = ['src/androidMain/res']
+        }
+        test {
+            java.srcDirs = ['src/androidTest/kotlin']
+            res.srcDirs = ['src/androidTest/res']
+        }
+    }
+    testOptions.unitTests.includeAndroidResources = true
 
+    buildTypes {
+        debug{}
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
 
 build.finalizedBy(publishToMavenLocal)

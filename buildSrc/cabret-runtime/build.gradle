@@ -43,7 +43,7 @@ compileTestKotlin {
 
 
 build{
-    dependsOn ':annotations:build'
+  //  dependsOn ':annotations:build'
 
     finalizedBy(install)
 }

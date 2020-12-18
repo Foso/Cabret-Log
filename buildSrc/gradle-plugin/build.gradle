@@ -4,6 +4,7 @@ plugins {
     id 'com.gradle.plugin-publish' version '0.10.1'
 }
 apply plugin: "java-gradle-plugin"
+apply plugin: "kotlin-kapt"
 apply plugin: "maven"
 
 
@@ -29,7 +30,10 @@ gradlePlugin {
 }
 
 dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     compile "org.jetbrains.kotlin:kotlin-gradle-plugin-api:1.4.21"
+
+
 }
 
 

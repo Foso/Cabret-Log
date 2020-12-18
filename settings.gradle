@@ -1,2 +1,3 @@
-//include ':androidSample'
+include ':androidSample'
 include ':example'
+include ':annotations'
