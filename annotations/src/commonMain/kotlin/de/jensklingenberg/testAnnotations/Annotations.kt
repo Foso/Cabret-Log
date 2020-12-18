@@ -36,11 +36,9 @@ object DebuglogHandler {
         this.listener = listener
     }
 
-
-
-    fun <T> logReturn(age: T): T {
-       onLog(age.toString(),Servity.DEBUG.name)
-        return age
+    fun <T> logReturn(returnObject: T,tag:String, servity: String): T {
+        onLog(tag+" "+returnObject.toString(),Servity.DEBUG.name)
+        return returnObject
     }
 }
 

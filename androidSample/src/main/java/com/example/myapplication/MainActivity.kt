@@ -22,8 +22,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         DebuglogHandler.addListener(object :DebuglogHandler.Listener{
-            override fun log(name: String, servity: DebuglogHandler.Servity) {
-                Log.d("HALLO1",name)
+            override fun log(logMessage: String, servity: DebuglogHandler.Servity) {
+                Log.d("HALLO1",logMessage)
 
             }
         })

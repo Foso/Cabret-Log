@@ -23,7 +23,8 @@ import org.jetbrains.kotlin.ir.declarations.IrFactory
 import org.jetbrains.kotlin.ir.declarations.IrFile
 import org.jetbrains.kotlin.ir.declarations.IrSimpleFunction
 import org.jetbrains.kotlin.ir.declarations.path
-import org.jetbrains.kotlin.ir.expressions.impl.IrReturnImpl
+import org.jetbrains.kotlin.ir.expressions.IrExpression
+import org.jetbrains.kotlin.ir.expressions.IrReturn
 import org.jetbrains.kotlin.ir.symbols.IrClassSymbol
 import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
 import org.jetbrains.kotlin.ir.util.IdSignature
@@ -56,8 +57,6 @@ class CabretLogTransformer(
             println(declaration.dump())
         }
 
-
-
         if (validateSignature(declaration)) {
             return super.visitSimpleFunction(transformFunction(declaration))
 
@@ -73,12 +72,11 @@ class CabretLogTransformer(
             .filter { (it.signature as IdSignature.PublicSignature).declarationFqName.substringAfterLast(".") == name }
     }
 
-
+//irSimpleFunction.getAnnotation(FqName(debugLogAnnoation)).getArguments().map { it.first }.find {it.name.asString()=="logReturn" }
     private fun transformFunction(irSimpleFunction: IrSimpleFunction): IrSimpleFunction {
         if (!irSimpleFunction.hasAnnotation(FqName(debugLogAnnoation))) {
             return irSimpleFunction
         }
-
 
         val cabretLogHandlerSymbol: IrClassSymbol? = context.referenceClass(FqName(DebuglogHandler::class.java.name))
 
@@ -90,11 +88,11 @@ class CabretLogTransformer(
             ?: return irSimpleFunction
 
         val logReturnSymbol =
-            cabretLogHandlerSymbol?.getFunctions("logReturn")?.first { it.owner.valueParameters.size == 1 }
-                ?: return irSimpleFunction
+            cabretLogHandlerSymbol.getFunctions("logReturn").first { it.owner.valueParameters.size == 3 }
         /**
          * Find the symbol for printLn()
          */
+
 
 
         irSimpleFunction.body = irFactory.createBlockBody(UNDEFINED_OFFSET, UNDEFINED_OFFSET) {
@@ -102,7 +100,6 @@ class CabretLogTransformer(
             with(context.irBuilder(irSimpleFunction.symbol)) {
                 irBlockBody {
                     statements += buildStatement(UNDEFINED_OFFSET, UNDEFINED_OFFSET) {
-
                         irCall(
                             onLogSymbol
                         ).apply {
@@ -117,32 +114,37 @@ class CabretLogTransformer(
                             putValueArgument(0, conc)
                             putValueArgument(1, irString(DebuglogHandler.Servity.DEBUG.name))
                         }
-
                     }
 
-                    statements += irSimpleFunction.body?.statements?.map { irStatement ->
-                        if (irStatement is IrReturnImpl) {
+                    irSimpleFunction.body?.transformChildren(object : IrElementTransformerVoidWithContext() {
+                        override fun visitReturn(expression: IrReturn): IrExpression {
                             if (logReturnEnabled) {
+                                /**
+                                 * return 4
+                                 * to
+                                 * return DebugLogHandler.logReturn(4)
+                                 */
                                 val calc = irCall(
-                                    logReturnSymbol, irStatement.value.type
+                                    logReturnSymbol, expression.value.type
                                 ).apply {
                                     dispatchReceiver = irGetObject(cabretLogHandlerSymbol)
-                                    putValueArgument(0, irStatement.value)
-                                    putTypeArgument(0, irStatement.value.type)
+                                    //
+                                    putValueArgument(0, expression.value)
+                                    putValueArgument(1, irString(DebuglogHandler.Servity.DEBUG.name))
+                                    putValueArgument(2, irString(DebuglogHandler.Servity.DEBUG.name))
+
+                                    putTypeArgument(0, expression.value.type)
                                 }
                                 val dero = irReturn(calc)
 
-                                dero
-                            } else {
-                                irStatement
+
+                                return super.visitReturn(dero)
                             }
+                            return super.visitReturn(expression)
 
-
-                        } else {
-                            irStatement
                         }
-
-                    } ?: emptyList()
+                    }, null)
+                    statements += irSimpleFunction.body?.statements ?: emptyList()
                 }
             }
 
