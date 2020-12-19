@@ -11,7 +11,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import com.example.myapplication.databinding.ActivityMainBinding
-import de.jensklingenberg.testAnnotations.DebuglogHandler
+import de.jensklingenberg.cabret.DebuglogHandler
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        DebuglogHandler.addListener(object :DebuglogHandler.Listener{
+        DebuglogHandler.addListener(object : DebuglogHandler.Listener{
             override fun log(logMessage: String, servity: DebuglogHandler.Servity) {
                 Log.d("HALLO1",logMessage)
 

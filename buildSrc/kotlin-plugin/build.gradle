@@ -19,13 +19,10 @@ repositories {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
-    implementation "de.jensklingenberg.debuglog.testAnnotations:annotations-jvm:0.0.1"
-   // implementation "de.jensklingenberg:cabret-runtime:0.0.1"
-    compile project(':cabret-runtime')
+    implementation project(':cabret-runtime')
 
     implementation "org.jetbrains.kotlin:kotlin-gradle-plugin-api"
     compileOnly "org.jetbrains.kotlin:kotlin-compiler-embeddable"
-//    implementation "org.jetbrains.kotlin:kotlin-platform-api:$kotlin_version"
     compileOnly "com.google.auto.service:auto-service:1.0-rc6"
     kapt "com.google.auto.service:auto-service:1.0-rc6"
 }

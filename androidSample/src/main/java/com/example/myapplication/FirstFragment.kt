@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.myapplication.databinding.FragmentFirstBinding
 
-import de.jensklingenberg.testAnnotations.DebugLog
+import de.jensklingenberg.cabret.DebugLog
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.

@@ -6,7 +6,6 @@ plugins {
 
 }
 
-apply plugin: "kotlin-kapt"
 apply plugin: "maven"
 
 
@@ -28,10 +27,17 @@ dependencies {
     compileOnly "org.jetbrains.kotlin:kotlin-compiler-embeddable"
 
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib"
-    compileOnly "com.google.auto.service:auto-service:1.0-rc6"
-    kapt "com.google.auto.service:auto-service:1.0-rc6"
-    implementation "de.jensklingenberg.debuglog.testAnnotations:annotations-jvm:0.0.1"
 
+    implementation "de.jensklingenberg.cabret:cabretlog:0.0.1"
+    testImplementation 'com.github.tschuchortdev:kotlin-compile-testing:1.3.3'
+    testImplementation "org.assertj:assertj-core:3.11.1"
+    testImplementation "org.mockito:mockito-core:3.1.0"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0"
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    // The Kotlin compiler should be near the end of the list because its .jar file includes
+    // an obsolete version of Guava
+    testImplementation "org.jetbrains.kotlin:kotlin-compiler-embeddable:1.4.21"
+    testImplementation "org.jetbrains.kotlin:kotlin-annotation-processing-embeddable:1.4.21"
 }
 
 compileKotlin {

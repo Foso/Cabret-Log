@@ -3,6 +3,8 @@ package de.jensklingenberg
 import com.google.auto.service.AutoService
 import com.intellij.mock.MockProject
 import de.jensklingenberg.common.KEY_ENABLED
+import de.jensklingenberg.debuglog.MyIrGenerationExtension
+import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.config.kotlinSourceRoots
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
@@ -29,6 +31,8 @@ class NativeTestComponentRegistrar : ComponentRegistrar {
             )
         }
 
+        //Debuglog
+        IrGenerationExtension.registerExtension(project, MyIrGenerationExtension(messageCollector))
 
     }
 }

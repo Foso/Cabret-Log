@@ -36,7 +36,13 @@ kotlin {
         binaries.executable()
 
     }
+    linuxX64("linux") {
+        configure([compilations.main]) {
+            tasks.getByName(compileKotlinTaskName).kotlinOptions {
 
+            }
+        }
+    }
 
     sourceSets {
         commonMain {
@@ -54,7 +60,7 @@ kotlin {
         jsMain {
             dependencies {
                 implementation kotlin('stdlib-js')
-                implementation "de.jensklingenberg.debuglog.testAnnotations:annotations-js:0.0.1"
+                implementation "de.jensklingenberg.cabret:cabretlog-js:0.0.1"
 
             }
         }
@@ -67,7 +73,7 @@ kotlin {
         jvmMain {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-                implementation "de.jensklingenberg.debuglog.testAnnotations:annotations-jvm:0.0.1"
+                implementation "de.jensklingenberg.cabret:cabretlog-jvm:0.0.1"
 
             }
         }
@@ -77,7 +83,11 @@ kotlin {
             }
         }
         linuxMain {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+                implementation "de.jensklingenberg.cabret:cabretlog-linux:0.0.1"
 
+            }
         }
         linuxTest {
         }
@@ -93,6 +103,6 @@ configurations {
     compileClasspath
 }
 build {
-    dependsOn ':annotations:build'
+    dependsOn ':cabretlog:build'
 
 }

@@ -1,10 +1,10 @@
 package de.jensklingenberg.debuglog
 
 
+import de.jensklingenberg.cabret.DebugLog
+import de.jensklingenberg.cabret.DebuglogHandler
+import de.jensklingenberg.cabret.IrDump
 import de.jensklingenberg.common.irBuilder
-import de.jensklingenberg.testAnnotations.DebugLog
-import de.jensklingenberg.testAnnotations.DebuglogHandler
-import de.jensklingenberg.testAnnotations.IrDump
 import org.jetbrains.kotlin.backend.common.FileLoweringPass
 import org.jetbrains.kotlin.backend.common.IrElementTransformerVoidWithContext
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
@@ -75,46 +75,26 @@ class CabretLogTransformer(
 
     private fun transformFunction(irSimpleFunction: IrSimpleFunction): IrSimpleFunction {
 
-        val cabretLogHandlerSymbol: IrClassSymbol? = context.referenceClass(FqName(DebuglogHandler::class.java.name))
+        val cabretLogHandlerSymbol: IrClassSymbol =
+            context.referenceClass(FqName(DebuglogHandler::class.java.name)) ?: return irSimpleFunction
 
-        /**
-         * Find the symbol for onLog(), we need it to create the irCall
-         */
-
-        val onLogSymbol = cabretLogHandlerSymbol?.getFunctions("onLog")?.first { it.owner.valueParameters.size == 2 }
-            ?: return irSimpleFunction
-
-
+            /**
+             * Find the symbol for onLog(), we need it to create the irCall
+             */
 
         irSimpleFunction.body = irFactory.createBlockBody(UNDEFINED_OFFSET, UNDEFINED_OFFSET) {
-
             with(context.irBuilder(irSimpleFunction.symbol)) {
                 irBlockBody {
-                    statements += buildStatement(UNDEFINED_OFFSET, UNDEFINED_OFFSET) {
-                        irCall(
-                            onLogSymbol
-                        ).apply {
-                            val conc = irConcat()
-
-                            //Read all parameter names and add them to the logstring
-                            irSimpleFunction.valueParameters.forEach {
-                                conc.addArgument(irString(" " + it.name.asString() + ": "))
-                                conc.addArgument(irGet(it))
-                            }
-                            dispatchReceiver = irGetObject(cabretLogHandlerSymbol)
-                            putValueArgument(0, conc)
-                            putValueArgument(1, irString(DebuglogHandler.Servity.DEBUG.name))
-                        }
-                    }
+                    statements += addParameterLogging(irSimpleFunction, cabretLogHandlerSymbol)
 
                     if (logReturnEnabled) {
                         transformReturnValue(irSimpleFunction, cabretLogHandlerSymbol)
                     }
+
                     //Add all other statements of the body
                     statements += irSimpleFunction.body?.statements ?: emptyList()
                 }
             }
-
         }
 
 
@@ -132,13 +112,34 @@ class CabretLogTransformer(
         return irSimpleFunction
     }
 
+    private fun IrBlockBodyBuilder.addParameterLogging(
+        irSimpleFunction: IrSimpleFunction,
+        cabretLogHandlerSymbol: IrClassSymbol
+    ) = buildStatement(UNDEFINED_OFFSET, UNDEFINED_OFFSET) {
+        val onLogSymbol = cabretLogHandlerSymbol.getFunctions("onLog").first { it.owner.valueParameters.size == 2 }
+
+        irCall(
+            onLogSymbol
+        ).apply {
+            val conc = irConcat()
+
+            //Read all parameter names and add them to the logstring
+            irSimpleFunction.valueParameters.forEach {
+                conc.addArgument(irString(" " + it.name.asString() + ": "))
+                conc.addArgument(irGet(it))
+            }
+            dispatchReceiver = irGetObject(cabretLogHandlerSymbol)
+            putValueArgument(0, conc)
+            putValueArgument(1, irString(DebuglogHandler.Servity.DEBUG.name))
+        }
+    }
+
     private fun IrBlockBodyBuilder.transformReturnValue(
         irSimpleFunction: IrSimpleFunction,
-
-        cabretLogHandlerSymbol: IrClassSymbol?
+        cabretLogHandlerSymbol: IrClassSymbol
     ) {
         val logReturnSymbol =
-            cabretLogHandlerSymbol?.getFunctions("logReturn").first { it.owner.valueParameters.size == 3 }
+            cabretLogHandlerSymbol.getFunctions("logReturn").first { it.owner.valueParameters.size == 3 }
         irSimpleFunction.body?.transformChildren(object : IrElementTransformerVoidWithContext() {
 
             /**
@@ -155,18 +156,21 @@ class CabretLogTransformer(
                 val call = irCall(
                     logReturnSymbol, expression.value.type
                 ).apply {
+                    // fun <T> logReturn(returnObject: T, tag: String, servity: String): T {
                     dispatchReceiver = irGetObject(cabretLogHandlerSymbol)
 
+                    //returnObject
                     putValueArgument(0, expression.value)
+
+                    //tag
                     putValueArgument(1, irString(DebuglogHandler.Servity.DEBUG.name))
+
+                    //servity
                     putValueArgument(2, irString(DebuglogHandler.Servity.DEBUG.name))
 
                     putTypeArgument(0, expression.value.type)
                 }
-
                 return super.visitReturn(irReturn(call))
-
-
             }
         }, null)
     }

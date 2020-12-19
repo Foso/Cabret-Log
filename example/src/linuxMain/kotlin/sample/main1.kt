@@ -1,9 +1,7 @@
-package sample.example2
-
-
-
+package sample
 
 import de.jensklingenberg.cabret.DebuglogHandler
+
 import sample.doSomething
 
 
