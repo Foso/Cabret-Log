@@ -11,6 +11,7 @@ import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.ir.IrStatement
 import org.jetbrains.kotlin.ir.UNDEFINED_OFFSET
+import org.jetbrains.kotlin.ir.builders.IrBlockBodyBuilder
 import org.jetbrains.kotlin.ir.builders.buildStatement
 import org.jetbrains.kotlin.ir.builders.irBlockBody
 import org.jetbrains.kotlin.ir.builders.irCall
@@ -72,26 +73,16 @@ class CabretLogTransformer(
             .filter { (it.signature as IdSignature.PublicSignature).declarationFqName.substringAfterLast(".") == name }
     }
 
-//irSimpleFunction.getAnnotation(FqName(debugLogAnnoation)).getArguments().map { it.first }.find {it.name.asString()=="logReturn" }
     private fun transformFunction(irSimpleFunction: IrSimpleFunction): IrSimpleFunction {
-        if (!irSimpleFunction.hasAnnotation(FqName(debugLogAnnoation))) {
-            return irSimpleFunction
-        }
 
         val cabretLogHandlerSymbol: IrClassSymbol? = context.referenceClass(FqName(DebuglogHandler::class.java.name))
 
         /**
-         * Find the symbol for Log.d(), we need it to create the irCall
+         * Find the symbol for onLog(), we need it to create the irCall
          */
 
         val onLogSymbol = cabretLogHandlerSymbol?.getFunctions("onLog")?.first { it.owner.valueParameters.size == 2 }
             ?: return irSimpleFunction
-
-        val logReturnSymbol =
-            cabretLogHandlerSymbol.getFunctions("logReturn").first { it.owner.valueParameters.size == 3 }
-        /**
-         * Find the symbol for printLn()
-         */
 
 
 
@@ -116,34 +107,10 @@ class CabretLogTransformer(
                         }
                     }
 
-                    irSimpleFunction.body?.transformChildren(object : IrElementTransformerVoidWithContext() {
-                        override fun visitReturn(expression: IrReturn): IrExpression {
-                            if (logReturnEnabled) {
-                                /**
-                                 * return 4
-                                 * to
-                                 * return DebugLogHandler.logReturn(4)
-                                 */
-                                val calc = irCall(
-                                    logReturnSymbol, expression.value.type
-                                ).apply {
-                                    dispatchReceiver = irGetObject(cabretLogHandlerSymbol)
-                                    //
-                                    putValueArgument(0, expression.value)
-                                    putValueArgument(1, irString(DebuglogHandler.Servity.DEBUG.name))
-                                    putValueArgument(2, irString(DebuglogHandler.Servity.DEBUG.name))
-
-                                    putTypeArgument(0, expression.value.type)
-                                }
-                                val dero = irReturn(calc)
-
-
-                                return super.visitReturn(dero)
-                            }
-                            return super.visitReturn(expression)
-
-                        }
-                    }, null)
+                    if (logReturnEnabled) {
+                        transformReturnValue(irSimpleFunction, cabretLogHandlerSymbol)
+                    }
+                    //Add all other statements of the body
                     statements += irSimpleFunction.body?.statements ?: emptyList()
                 }
             }
@@ -163,6 +130,45 @@ class CabretLogTransformer(
 
         }
         return irSimpleFunction
+    }
+
+    private fun IrBlockBodyBuilder.transformReturnValue(
+        irSimpleFunction: IrSimpleFunction,
+
+        cabretLogHandlerSymbol: IrClassSymbol?
+    ) {
+        val logReturnSymbol =
+            cabretLogHandlerSymbol?.getFunctions("logReturn").first { it.owner.valueParameters.size == 3 }
+        irSimpleFunction.body?.transformChildren(object : IrElementTransformerVoidWithContext() {
+
+            /**
+             * Get every "return value"
+             * If return logging is enbabled
+             * Every expression gets transformerd
+             *
+             * return x
+             * gets transformed to:
+             *
+             * return DebugLogHandler.logReturn(x)
+             */
+            override fun visitReturn(expression: IrReturn): IrExpression {
+                val call = irCall(
+                    logReturnSymbol, expression.value.type
+                ).apply {
+                    dispatchReceiver = irGetObject(cabretLogHandlerSymbol)
+
+                    putValueArgument(0, expression.value)
+                    putValueArgument(1, irString(DebuglogHandler.Servity.DEBUG.name))
+                    putValueArgument(2, irString(DebuglogHandler.Servity.DEBUG.name))
+
+                    putTypeArgument(0, expression.value.type)
+                }
+
+                return super.visitReturn(irReturn(call))
+
+
+            }
+        }, null)
     }
 }
 
