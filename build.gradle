@@ -1,11 +1,10 @@
 buildscript {
 
+
+
     ext {
-        kotlin_version = '1.4.10'
+        kotlin_version = '1.4.21'
     }
-    ext.buildMaven = { p -> repositories { maven { url p } } }
-
-
     repositories {
         mavenLocal()
         google()
@@ -15,20 +14,17 @@ buildscript {
 
     dependencies {
         classpath "com.android.tools.build:gradle:4.0.2"
-        classpath 'com.github.jengelman.gradle.plugins:shadow:5.0.0'
         classpath "de.jensklingenberg:cabret-gradle:1.0.0"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
     }
 
 }
+
 plugins {
     id 'org.jetbrains.kotlin.multiplatform' version '1.4.21' apply false
+
 }
-
-
-System.setProperty("kotlin.compiler.execution.strategy", "in-process") // For debugging
-
 allprojects {
     repositories {
         google()
@@ -41,24 +37,5 @@ allprojects {
 
 
 
-allprojects {
-    ext.buildMaven = { p -> repositories { maven { url p } } }
 
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        maven { url "https://maven.google.com" }
-        maven { url "https://plugins.gradle.org/m2/" }
-        google()
-        jcenter()
-
-
-    }
-}
-
-
-
-// workaround for https://youtrack.jetbrains.com/issue/KT-27170
-configurations {
-    compileClasspath
-}
+//./gradlew :example:clean :example:build --no-daemon -Dorg.gradle.debug=true -Dkotlin.compiler.execution.strategy="in-process" -Dkotlin.daemon.jvm.options="-Xdebug,-Xrunjdwp:transport=dt_socket\,address=5005\,server=y\,suspend=n"

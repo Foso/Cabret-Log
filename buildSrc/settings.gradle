@@ -1,7 +1,0 @@
-include ':cabret-runtime'
-
-include ':kotlin-plugin'
-include 'kotlin-native-plugin'
-
-include ':gradle-plugin'
-
