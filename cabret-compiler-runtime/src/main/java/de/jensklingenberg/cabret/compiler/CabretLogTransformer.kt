@@ -1,7 +1,6 @@
 package de.jensklingenberg.cabret.compiler
 
 
-
 import de.jensklingenberg.cabret.Cabret
 import de.jensklingenberg.cabret.DebugLog
 import de.jensklingenberg.cabret.LogHandler
@@ -24,22 +23,28 @@ import org.jetbrains.kotlin.ir.builders.irTemporary
 import org.jetbrains.kotlin.ir.declarations.IrFactory
 import org.jetbrains.kotlin.ir.declarations.IrFile
 import org.jetbrains.kotlin.ir.declarations.IrSimpleFunction
+import org.jetbrains.kotlin.ir.declarations.IrValueParameter
 import org.jetbrains.kotlin.ir.declarations.IrVariable
 import org.jetbrains.kotlin.ir.declarations.name
 import org.jetbrains.kotlin.ir.declarations.path
 import org.jetbrains.kotlin.ir.expressions.IrExpression
 import org.jetbrains.kotlin.ir.expressions.IrReturn
+import org.jetbrains.kotlin.ir.expressions.impl.IrConstImpl
+import org.jetbrains.kotlin.ir.expressions.impl.IrGetEnumValueImpl
 import org.jetbrains.kotlin.ir.symbols.IrClassSymbol
 import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
 import org.jetbrains.kotlin.ir.util.IdSignature
-import org.jetbrains.kotlin.ir.util.dump
 import org.jetbrains.kotlin.ir.util.file
 import org.jetbrains.kotlin.ir.util.functions
+import org.jetbrains.kotlin.ir.util.getAnnotation
+import org.jetbrains.kotlin.ir.util.getArgumentsWithIr
 import org.jetbrains.kotlin.ir.util.hasAnnotation
+import org.jetbrains.kotlin.ir.util.parentClassOrNull
 import org.jetbrains.kotlin.ir.util.statements
 import org.jetbrains.kotlin.name.FqName
-
 import java.io.File
+
+class DebugLogData(val logLevel: Cabret.LogLevel = Cabret.LogLevel.DEBUG, val tag: String = "")
 
 class CabretLogTransformer(
     private val context: IrPluginContext,
@@ -62,7 +67,6 @@ class CabretLogTransformer(
     private val funElapsedNow =
         context.referenceFunctions(FqName("kotlin.time.TimeMark.elapsedNow"))
             .single()
-
 
 
     override fun lower(irFile: IrFile) {
@@ -94,22 +98,24 @@ class CabretLogTransformer(
         val cabretLogHandlerSymbol: IrClassSymbol =
             context.referenceClass(FqName(LogHandler::class.java.name)) ?: return irSimpleFunction
 
-            /**
-             * Find the symbol for onLog(), we need it to create the irCall
-             */
+        val debugLogData = mapToDebugLog(irSimpleFunction)
+
+        /**
+         * Find the symbol for onLog(), we need it to create the irCall
+         */
 
         irSimpleFunction.body = irFactory.createBlockBody(UNDEFINED_OFFSET, UNDEFINED_OFFSET) {
             with(context.irBuilder(irSimpleFunction.symbol)) {
                 irBlockBody {
-                   val startTimer= irTemporary(irCall(funMarkNow).also { call ->
+                    val startTimer = irTemporary(irCall(funMarkNow).also { call ->
                         call.dispatchReceiver = irGetObject(classMonotonic)
                     })
                     statements += addStartTimer(startTimer)
 
-                    statements += addParameterLogging(irSimpleFunction, cabretLogHandlerSymbol)
+                    statements += addParameterLogging(irSimpleFunction, cabretLogHandlerSymbol, debugLogData)
 
                     if (logReturnEnabled) {
-                        transformReturnValue(irSimpleFunction, cabretLogHandlerSymbol,startTimer)
+                        transformReturnValue(irSimpleFunction, cabretLogHandlerSymbol, startTimer, debugLogData)
                     }
 
                     //Add all other statements of the body
@@ -121,39 +127,73 @@ class CabretLogTransformer(
         return irSimpleFunction
     }
 
+    /**
+     * TODO: I need to find better way read the arguments from the Annotation
+     */
+    fun mapToDebugLog(irSimpleFunction: IrSimpleFunction): DebugLogData {
+        val annotation = irSimpleFunction.getAnnotation(FqName(DebugLog::class.java.name))!!
+        fun findByName(name: String): Pair<IrValueParameter, IrExpression>? {
+            return annotation.getArgumentsWithIr().find { it.first.name.asString() == name }
+        }
+
+        val logLevelString =
+            (findByName("logLevel")?.second as IrGetEnumValueImpl).symbol.signature.asPublic()?.declarationFqName?.substringAfterLast(
+                "."
+            ) ?: ""
+
+        val logLevel = Cabret.LogLevel.values().find { it.name == logLevelString } ?: Cabret.LogLevel.DEBUG
+
+        val tag = (findByName(("tag"))?.second as? IrConstImpl<String>)?.value
+            ?: irSimpleFunction.parentClassOrNull?.name?.asString() ?: irSimpleFunction.file.name
+
+        return DebugLogData(tag = tag, logLevel = logLevel)
+    }
+
     private fun IrBlockBodyBuilder.addParameterLogging(
         irSimpleFunction: IrSimpleFunction,
-        cabretLogHandlerSymbol: IrClassSymbol
+        cabretLogHandlerSymbol: IrClassSymbol,
+        test: DebugLogData
     ) = buildStatement(UNDEFINED_OFFSET, UNDEFINED_OFFSET) {
+
         val onLogSymbol = cabretLogHandlerSymbol.getFunctions("onLog").first { it.owner.valueParameters.size == 3 }
-        val tagName = irSimpleFunction.file.name
+
         irCall(
             onLogSymbol
         ).apply {
-            val conc = irConcat()
-            conc.addArgument(irString("-> ${irSimpleFunction.name} "))
-            //Read all parameter names and add them to the logstring
-            irSimpleFunction.valueParameters.forEach {
-                conc.addArgument(irString(it.name.asString() + ": "))
-                conc.addArgument(irGet(it))
-            }
+
             dispatchReceiver = irGetObject(cabretLogHandlerSymbol)
-            putValueArgument(0, irString(tagName))
+            putValueArgument(0, irString(test.tag))
+
+            val conc = irConcat()
+            conc.addArgument(irString("-> ${irSimpleFunction.name}( "))
+            //Read all parameter names and add them to the logstring
+            irSimpleFunction.valueParameters.forEachIndexed { index, irValueParameter ->
+
+                conc.addArgument(irString(irValueParameter.name.asString() + "= "))
+                conc.addArgument(irGet(irValueParameter))
+
+                if ((index + 1) < irSimpleFunction.valueParameters.size) {
+                    conc.addArgument(irString(", "))
+                }
+
+            }
+            conc.addArgument(irString(")"))
             putValueArgument(1, conc)
-            putValueArgument(2, irString(Cabret.LogLevel.DEBUG.name))
+            putValueArgument(2, irString(test.logLevel.name))
         }
     }
 
     private fun IrBlockBodyBuilder.transformReturnValue(
         irSimpleFunction: IrSimpleFunction,
         cabretLogHandlerSymbol: IrClassSymbol,
-        start: IrVariable
+        start: IrVariable,
+        debugLogData: DebugLogData
     ) {
         val logReturnSymbol =
             cabretLogHandlerSymbol.getFunctions("logReturn").first { it.owner.valueParameters.size == 3 }
-        val tagName = irSimpleFunction.file.name
 
         irSimpleFunction.body?.transformChildren(object : IrElementTransformerVoidWithContext() {
+
 
             /**
              * Get every "return value"
@@ -174,18 +214,22 @@ class CabretLogTransformer(
 
                     //tag
                     val conc = irConcat()
-                    conc.addArgument(irString(tagName))
+                    conc.addArgument(irString(debugLogData.tag))
+                    conc.addArgument(irString(" <- ${irSimpleFunction.name}() ["))
+
                     //Get the time
                     conc.addArgument(irCall(funElapsedNow).also { call ->
                         call.dispatchReceiver = irGet(start)
                     })
+                    conc.addArgument(irString("] = "))
+
                     putValueArgument(0, conc)
 
                     //returnObject
                     putValueArgument(1, expression.value)
 
                     //LogLevel
-                    putValueArgument(2, irString(Cabret.LogLevel.DEBUG.name))
+                    putValueArgument(2, irString(debugLogData.logLevel.name))
 
                     putTypeArgument(0, expression.value.type)
                 }
@@ -197,3 +241,5 @@ class CabretLogTransformer(
     private fun addStartTimer(start: IrVariable) = start
 }
 
+
+// ./gradlew :example:clean :example:compileKotlinJvm --no-daemon -Dorg.gradle.debug=true -Dkotlin.compiler.execution.strategy="in-process" -Dkotlin.daemon.jvm.options="-Xdebug,-Xrunjdwp:transport=dt_socket\,address=5005\,server=y\,suspend=n"

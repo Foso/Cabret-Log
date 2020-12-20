@@ -2,7 +2,7 @@ package de.jensklingenberg.cabret
 
 
 @Target(AnnotationTarget.FUNCTION)
-annotation class DebugLog(val logReturn: Boolean = false, val logLevel: Cabret.LogLevel = Cabret.LogLevel.DEBUG)
+annotation class DebugLog(val logLevel: Cabret.LogLevel = Cabret.LogLevel.DEBUG,val tag:String="")
 
 
 object LogHandler {
@@ -37,7 +37,7 @@ expect class DefaultListener() : Cabret.Listener {
 
 class CommonListener : Cabret.Listener {
     override fun log(tag: String, msg: String, logLevel: Cabret.LogLevel) {
-        println(tag + " " + msg + " " + logLevel)
+        println(tag + " " + msg)
     }
 }
 
