@@ -9,9 +9,9 @@ object LogHandler {
 
     private var listener: Cabret.Listener = DefaultListener()
 
-    fun onLog(tag: String, name: String, servity: String) {
-        val serv = Cabret.LogLevel.valueOf(servity)
-        listener.log(tag, name, serv)
+    fun onLog(tag: String, name: String, logLevel: String) {
+        val serv = Cabret.LogLevel.valueOf(logLevel)
+        listener.log(tag,  name, serv)
     }
 
     fun addListener(listener: Cabret.Listener) {
@@ -21,9 +21,13 @@ object LogHandler {
     /**
      * This is used to log the retun values
      */
-    fun <T> logReturn(returnObject: T, tag: String, servity: String): T {
-        onLog(tag, returnObject.toString(), servity)
+    fun <T> logReturn(tag: String, returnObject: T, logLevel: String): T {
+        onLog(tag,  returnObject.toString(), logLevel)
         return returnObject
+    }
+
+    fun removeListener() {
+        listener = DefaultListener()
     }
 }
 
@@ -49,5 +53,9 @@ object Cabret {
 
     fun addListener(listener: Cabret.Listener) {
         LogHandler.addListener(listener)
+    }
+
+    fun removeListener() {
+        LogHandler.removeListener()
     }
 }

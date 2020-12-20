@@ -11,5 +11,5 @@
 /kotlin-plugin-shared/build/
 /buildSrc/build/
 /buildSrc/.gradle/
-/cabret-compiler/build/
+/cabret-compiler-runtime/build/
 /cabret-gradle/build/

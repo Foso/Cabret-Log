@@ -6,7 +6,7 @@ plugins {
 apply plugin: 'kotlin-multiplatform'
 //apply plugin: 'com.android.library'
 
-group = "de.jensklingenberg"
+group = "de.jensklingenberg.cabret"
 archivesBaseName = "cabretlog"
 version = "1.0.0"
 

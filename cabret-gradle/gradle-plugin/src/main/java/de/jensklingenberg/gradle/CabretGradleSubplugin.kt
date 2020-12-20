@@ -9,15 +9,18 @@ import org.jetbrains.kotlin.gradle.plugin.SubpluginOption
 
 open class CabretGradleExtension {
     var enabled: Boolean = true
+    var version: String = "1.0.0"
 }
 
 
 class CabretGradleSubplugin : KotlinCompilerPluginSupportPlugin {
 
+    private var gradleExtension : CabretGradleExtension = CabretGradleExtension()
+
     companion object {
-        const val SERIALIZATION_GROUP_NAME = "de.jensklingenberg"
-        const val ARTIFACT_NAME = "kotlin-compiler-plugin"
-        const val NATIVE_ARTIFACT_NAME = "kotlin-native-plugin"
+        const val SERIALIZATION_GROUP_NAME = "de.jensklingenberg.cabret"
+        const val ARTIFACT_NAME = "cabret-compiler-plugin"
+        const val NATIVE_ARTIFACT_NAME = "cabret-compiler-plugin-native"
     }
 
     override fun apply(target: Project) {
@@ -29,12 +32,12 @@ class CabretGradleSubplugin : KotlinCompilerPluginSupportPlugin {
     }
 
     override fun applyToCompilation(kotlinCompilation: KotlinCompilation<*>): Provider<List<SubpluginOption>> {
-        val extension = kotlinCompilation.target.project.extensions.findByType(CabretGradleExtension::class.java)
+        gradleExtension = kotlinCompilation.target.project.extensions.findByType(CabretGradleExtension::class.java)
             ?: CabretGradleExtension()
         val project = kotlinCompilation.target.project
 
         return project.provider {
-            val options = mutableListOf<SubpluginOption>(SubpluginOption("enabled", extension.enabled.toString()))
+            val options = mutableListOf<SubpluginOption>(SubpluginOption("enabled", gradleExtension.enabled.toString()))
             options
         }
     }
@@ -47,7 +50,7 @@ class CabretGradleSubplugin : KotlinCompilerPluginSupportPlugin {
     override fun getPluginArtifact(): SubpluginArtifact = SubpluginArtifact(
         groupId = SERIALIZATION_GROUP_NAME,
         artifactId = ARTIFACT_NAME,
-        version = "1.0" // remember to bump this version before any release!
+        version = gradleExtension.version // remember to bump this version before any release!
     )
 
     override fun isApplicable(kotlinCompilation: KotlinCompilation<*>): Boolean {
@@ -57,6 +60,6 @@ class CabretGradleSubplugin : KotlinCompilerPluginSupportPlugin {
     override fun getPluginArtifactForNative() = SubpluginArtifact(
         groupId = SERIALIZATION_GROUP_NAME,
         artifactId = NATIVE_ARTIFACT_NAME,
-        version = "1.0" // remember to bump this version before any release!
+        version = gradleExtension.version // remember to bump this version before any release!
     )
 }

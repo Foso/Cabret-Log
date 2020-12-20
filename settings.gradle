@@ -1,8 +1,7 @@
-includeBuild("cabret-gradle")
 include 'example'
-include ':kotlin-native-plugin'
-include ':kotlin-plugin'
+include ':cabret-compiler-plugin-native'
+include ':cabret-compiler-plugin'
 
 include ':cabret-log'
 
-include ':cabret-compiler'
+include ':cabret-compiler-runtime'

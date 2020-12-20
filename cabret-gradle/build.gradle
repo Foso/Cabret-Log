@@ -2,6 +2,8 @@
 
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.4.21'
+    id 'io.codearte.nexus-staging' version '0.21.0'
+
 }
 apply plugin: "maven"
 

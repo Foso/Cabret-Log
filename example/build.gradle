@@ -1,11 +1,12 @@
 
-
+apply plugin: 'java'
 apply plugin: 'kotlin-multiplatform'
 
 apply plugin: 'de.jensklingenberg.cabret'
 
 cabret {
     enabled = true
+
 }
 
 System.setProperty("kotlin.compiler.execution.strategy", "in-process") // For debugging
@@ -25,7 +26,7 @@ allprojects {
 allprojects {
 
     repositories {
-        mavenLocal()
+
         mavenCentral()
         maven { url "https://maven.google.com" }
         maven { url "https://plugins.gradle.org/m2/" }
@@ -76,7 +77,7 @@ kotlin {
         jsMain {
             dependencies {
                 implementation kotlin('stdlib-js')
-                implementation "de.jensklingenberg:cabret-log-js:1.0.0"
+                implementation "de.jensklingenberg.cabret:cabret-log-js:1.0.0"
 
             }
         }
@@ -89,9 +90,7 @@ kotlin {
         jvmMain {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-                implementation "de.jensklingenberg:cabret-log-jvm:1.0.0"
-
-
+                implementation "de.jensklingenberg.cabret:cabret-log-jvm:1.0.0"
             }
         }
         jvmTest {
@@ -103,7 +102,7 @@ kotlin {
 
         linuxMain {
             dependencies {
-                implementation "de.jensklingenberg:cabret-log-linux:1.0.0"
+                implementation "de.jensklingenberg.cabret:cabret-log-linux:1.0.0"
 
 
             }
@@ -118,7 +117,7 @@ kotlin {
 build {
     dependsOn ':cabret-log:build'
 
-    dependsOn ':kotlin-plugin:build'
+   // dependsOn ':cabret-compiler-plugin:build'
 
 }
 
