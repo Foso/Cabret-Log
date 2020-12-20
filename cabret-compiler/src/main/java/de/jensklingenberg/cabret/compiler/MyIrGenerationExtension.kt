@@ -1,6 +1,5 @@
-package de.jensklingenberg.debuglog
+package de.jensklingenberg.cabret.compiler
 
-import de.jensklingenberg.common.runOnFileInOrder
 import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector

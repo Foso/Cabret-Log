@@ -1,4 +1,4 @@
-package de.jensklingenberg.common
+package de.jensklingenberg.cabret.compiler
 
 import org.jetbrains.kotlin.backend.common.FileLoweringPass
 import org.jetbrains.kotlin.backend.common.lower.DeclarationIrBuilder

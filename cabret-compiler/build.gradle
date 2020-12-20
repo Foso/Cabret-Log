@@ -40,7 +40,7 @@ repositories {
 dependencies {
     compileOnly "org.jetbrains.kotlin:kotlin-compiler-embeddable"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib"
-    implementation "de.jensklingenberg:cabretlog-jvm:1.0.0"
+    implementation "de.jensklingenberg:cabret-log-jvm:1.0.0"
 
     testImplementation("org.jetbrains.kotlin:kotlin-compiler-embeddable")
     testImplementation("com.github.tschuchortdev:kotlin-compile-testing:1.3.3")

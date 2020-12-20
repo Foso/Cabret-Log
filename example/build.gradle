@@ -76,7 +76,7 @@ kotlin {
         jsMain {
             dependencies {
                 implementation kotlin('stdlib-js')
-                implementation "de.jensklingenberg:cabretlog-js:1.0.0"
+                implementation "de.jensklingenberg:cabret-log-js:1.0.0"
 
             }
         }
@@ -89,7 +89,7 @@ kotlin {
         jvmMain {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-                implementation "de.jensklingenberg:cabretlog-jvm:1.0.0"
+                implementation "de.jensklingenberg:cabret-log-jvm:1.0.0"
 
 
             }
@@ -102,7 +102,11 @@ kotlin {
         }
 
         linuxMain {
+            dependencies {
+                implementation "de.jensklingenberg:cabret-log-linux:1.0.0"
 
+
+            }
 
         }
         linuxTest {
@@ -112,9 +116,9 @@ kotlin {
 }
 
 build {
-    dependsOn ':cabretlog:build'
+    dependsOn ':cabret-log:build'
 
-    dependsOn ':kotlin-plugin:install'
+    dependsOn ':kotlin-plugin:build'
 
 }
 

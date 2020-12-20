@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinCompilerPluginSupportPlugin
 import org.jetbrains.kotlin.gradle.plugin.SubpluginArtifact
 import org.jetbrains.kotlin.gradle.plugin.SubpluginOption
 
-open class TestCompilerExtension {
+open class CabretGradleExtension {
     var enabled: Boolean = true
 }
 
@@ -23,14 +23,14 @@ class CabretGradleSubplugin : KotlinCompilerPluginSupportPlugin {
     override fun apply(target: Project) {
         target.extensions.create(
             "cabret",
-            TestCompilerExtension::class.java
+            CabretGradleExtension::class.java
         )
         super.apply(target)
     }
 
     override fun applyToCompilation(kotlinCompilation: KotlinCompilation<*>): Provider<List<SubpluginOption>> {
-        val extension = kotlinCompilation.target.project.extensions.findByType(TestCompilerExtension::class.java)
-            ?: TestCompilerExtension()
+        val extension = kotlinCompilation.target.project.extensions.findByType(CabretGradleExtension::class.java)
+            ?: CabretGradleExtension()
         val project = kotlinCompilation.target.project
 
         return project.provider {

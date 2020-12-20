@@ -1,10 +1,10 @@
-package de.jensklingenberg.debuglog
+package de.jensklingenberg.cabret.compiler
 
 
+
+import de.jensklingenberg.cabret.Cabret
 import de.jensklingenberg.cabret.DebugLog
-import de.jensklingenberg.cabret.DebuglogHandler
-import de.jensklingenberg.cabret.IrDump
-import de.jensklingenberg.common.irBuilder
+import de.jensklingenberg.cabret.LogHandler
 import org.jetbrains.kotlin.backend.common.FileLoweringPass
 import org.jetbrains.kotlin.backend.common.IrElementTransformerVoidWithContext
 import org.jetbrains.kotlin.backend.common.extensions.IrPluginContext
@@ -20,9 +20,11 @@ import org.jetbrains.kotlin.ir.builders.irGet
 import org.jetbrains.kotlin.ir.builders.irGetObject
 import org.jetbrains.kotlin.ir.builders.irReturn
 import org.jetbrains.kotlin.ir.builders.irString
+import org.jetbrains.kotlin.ir.builders.irTemporary
 import org.jetbrains.kotlin.ir.declarations.IrFactory
 import org.jetbrains.kotlin.ir.declarations.IrFile
 import org.jetbrains.kotlin.ir.declarations.IrSimpleFunction
+import org.jetbrains.kotlin.ir.declarations.IrVariable
 import org.jetbrains.kotlin.ir.declarations.path
 import org.jetbrains.kotlin.ir.expressions.IrExpression
 import org.jetbrains.kotlin.ir.expressions.IrReturn
@@ -34,6 +36,7 @@ import org.jetbrains.kotlin.ir.util.functions
 import org.jetbrains.kotlin.ir.util.hasAnnotation
 import org.jetbrains.kotlin.ir.util.statements
 import org.jetbrains.kotlin.name.FqName
+
 import java.io.File
 
 class CabretLogTransformer(
@@ -46,6 +49,22 @@ class CabretLogTransformer(
     private val debugLogAnnoation: String = DebugLog::class.java.name
     val logReturnEnabled = true
 
+    private val typeUnit = context.irBuiltIns.unitType
+    private val typeThrowable = context.irBuiltIns.throwableType
+
+    private val classMonotonic =
+        context.referenceClass(FqName("kotlin.time.TimeSource.Monotonic"))!!
+
+    private val funMarkNow =
+        context.referenceFunctions(FqName("kotlin.time.TimeSource.markNow"))
+            .single()
+
+    private val funElapsedNow =
+        context.referenceFunctions(FqName("kotlin.time.TimeMark.elapsedNow"))
+            .single()
+
+
+
     override fun lower(irFile: IrFile) {
         file = irFile
         fileSource = File(irFile.path).readText()
@@ -54,9 +73,6 @@ class CabretLogTransformer(
     }
 
     override fun visitSimpleFunction(declaration: IrSimpleFunction): IrStatement {
-        if (declaration.hasAnnotation(FqName(IrDump::class.java.name))) {
-            println(declaration.dump())
-        }
 
         if (validateSignature(declaration)) {
             return super.visitSimpleFunction(transformFunction(declaration))
@@ -76,7 +92,7 @@ class CabretLogTransformer(
     private fun transformFunction(irSimpleFunction: IrSimpleFunction): IrSimpleFunction {
 
         val cabretLogHandlerSymbol: IrClassSymbol =
-            context.referenceClass(FqName(DebuglogHandler::class.java.name)) ?: return irSimpleFunction
+            context.referenceClass(FqName(LogHandler::class.java.name)) ?: return irSimpleFunction
 
             /**
              * Find the symbol for onLog(), we need it to create the irCall
@@ -85,10 +101,15 @@ class CabretLogTransformer(
         irSimpleFunction.body = irFactory.createBlockBody(UNDEFINED_OFFSET, UNDEFINED_OFFSET) {
             with(context.irBuilder(irSimpleFunction.symbol)) {
                 irBlockBody {
+                   val startTimer= irTemporary(irCall(funMarkNow).also { call ->
+                        call.dispatchReceiver = irGetObject(classMonotonic)
+                    })
+                    statements += addStartTimer(startTimer)
+
                     statements += addParameterLogging(irSimpleFunction, cabretLogHandlerSymbol)
 
                     if (logReturnEnabled) {
-                        transformReturnValue(irSimpleFunction, cabretLogHandlerSymbol)
+                        transformReturnValue(irSimpleFunction, cabretLogHandlerSymbol,startTimer)
                     }
 
                     //Add all other statements of the body
@@ -116,7 +137,7 @@ class CabretLogTransformer(
         irSimpleFunction: IrSimpleFunction,
         cabretLogHandlerSymbol: IrClassSymbol
     ) = buildStatement(UNDEFINED_OFFSET, UNDEFINED_OFFSET) {
-        val onLogSymbol = cabretLogHandlerSymbol.getFunctions("onLog").first { it.owner.valueParameters.size == 2 }
+        val onLogSymbol = cabretLogHandlerSymbol.getFunctions("onLog").first { it.owner.valueParameters.size == 3 }
 
         irCall(
             onLogSymbol
@@ -129,14 +150,16 @@ class CabretLogTransformer(
                 conc.addArgument(irGet(it))
             }
             dispatchReceiver = irGetObject(cabretLogHandlerSymbol)
-            putValueArgument(0, conc)
-            putValueArgument(1, irString(DebuglogHandler.Servity.DEBUG.name))
+            putValueArgument(0, irString(Cabret.LogLevel.DEBUG.name))
+            putValueArgument(1, conc)
+            putValueArgument(2, irString(Cabret.LogLevel.DEBUG.name))
         }
     }
 
     private fun IrBlockBodyBuilder.transformReturnValue(
         irSimpleFunction: IrSimpleFunction,
-        cabretLogHandlerSymbol: IrClassSymbol
+        cabretLogHandlerSymbol: IrClassSymbol,
+        start: IrVariable
     ) {
         val logReturnSymbol =
             cabretLogHandlerSymbol.getFunctions("logReturn").first { it.owner.valueParameters.size == 3 }
@@ -163,10 +186,16 @@ class CabretLogTransformer(
                     putValueArgument(0, expression.value)
 
                     //tag
-                    putValueArgument(1, irString(DebuglogHandler.Servity.DEBUG.name))
+                    val conc = irConcat()
+                    conc.addArgument(irString(Cabret.LogLevel.DEBUG.name+ " "))
+                    //Get the time
+                    conc.addArgument(irCall(funElapsedNow).also { call ->
+                        call.dispatchReceiver = irGet(start)
+                    })
+                    putValueArgument(1, conc)
 
                     //servity
-                    putValueArgument(2, irString(DebuglogHandler.Servity.DEBUG.name))
+                    putValueArgument(2, irString(Cabret.LogLevel.DEBUG.name))
 
                     putTypeArgument(0, expression.value.type)
                 }
@@ -174,5 +203,7 @@ class CabretLogTransformer(
             }
         }, null)
     }
+
+    private fun addStartTimer(start: IrVariable) = start
 }
 

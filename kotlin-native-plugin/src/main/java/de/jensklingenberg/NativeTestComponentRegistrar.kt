@@ -3,11 +3,11 @@ package de.jensklingenberg
 import com.google.auto.service.AutoService
 import com.intellij.mock.MockProject
 import de.jensklingenberg.common.KEY_ENABLED
-import de.jensklingenberg.debuglog.MyIrGenerationExtension
+import de.jensklingenberg.cabret.compiler.MyIrGenerationExtension
 import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.config.kotlinSourceRoots
-import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
+import org.jetbrains.kotlin.cli.common.messages.CompilerMessageLogLevel
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar
 import org.jetbrains.kotlin.config.CompilerConfiguration
@@ -26,7 +26,7 @@ class NativeTestComponentRegistrar : ComponentRegistrar {
 
         configuration.kotlinSourceRoots.forEach {
             messageCollector.report(
-                CompilerMessageSeverity.WARNING,
+                CompilerMessageLogLevel.WARNING,
                 "*** Hello from ***" + it.path
             )
         }

@@ -1,7 +1,7 @@
 package de.jensklingenberg
 
 import com.google.auto.service.AutoService
-import de.jensklingenberg.debuglog.MyIrGenerationExtension
+import de.jensklingenberg.cabret.compiler.MyIrGenerationExtension
 
 import org.jetbrains.kotlin.backend.common.extensions.IrGenerationExtension
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys

@@ -3,6 +3,6 @@ include 'example'
 include ':kotlin-native-plugin'
 include ':kotlin-plugin'
 
-include ':cabretlog'
+include ':cabret-log'
 
 include ':cabret-compiler'

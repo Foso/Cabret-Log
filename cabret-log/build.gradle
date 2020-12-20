@@ -7,7 +7,7 @@ apply plugin: 'kotlin-multiplatform'
 //apply plugin: 'com.android.library'
 
 group = "de.jensklingenberg"
-
+archivesBaseName = "cabretlog"
 version = "1.0.0"
 
 
