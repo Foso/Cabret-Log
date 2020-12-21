@@ -1,23 +1,11 @@
-buildscript {
-
-    ext {
-        kotlin_version = '1.4.21'
-    }
-
-    repositories {
-        mavenLocal()
-        google()
-        jcenter()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:5.0.0'
-    }
-}
 plugins {
     id 'org.jetbrains.kotlin.jvm'
     id 'maven-publish'
+    id("org.jetbrains.dokka") version "1.4.20"
+    id "com.vanniktech.maven.publish" version "0.13.0"
+    id 'io.codearte.nexus-staging' version '0.21.0'
+    id 'com.gradle.plugin-publish' version '0.11.0'
+
 }
 
 apply plugin: "maven"
@@ -25,7 +13,7 @@ apply plugin: "maven"
 
 group = "de.jensklingenberg.cabret"
 archivesBaseName = "cabret-compiler-runtime"
-version = "1.0"
+version = "1.0.0"
 
 install {
     repositories.mavenInstaller {
@@ -40,7 +28,7 @@ repositories {
 dependencies {
     compileOnly "org.jetbrains.kotlin:kotlin-compiler-embeddable"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib"
-    implementation "de.jensklingenberg.cabret:cabret-log-jvm:1.0.0"
+    implementation "de.jensklingenberg.cabret:cabretlog-jvm:1.0.0"
 
     testImplementation("org.jetbrains.kotlin:kotlin-compiler-embeddable")
     testImplementation("com.github.tschuchortdev:kotlin-compile-testing:1.3.3")
@@ -53,7 +41,7 @@ compileKotlin {
 }
 
 
-build{
+build {
     finalizedBy(install)
 }
 
@@ -61,5 +49,24 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
     kotlinOptions {
         jvmTarget = "1.8"
         freeCompilerArgs += ["-Xallow-jvm-ir-dependencies", "-Xskip-prerelease-check"]
+    }
+}
+
+nexusStaging {
+    packageGroup = "de.jensklingenberg" //optional if packageGroup == project.getGroup()
+    stagingProfileId = "d56228753311b0" //when not defined will be got from server using "packageGroup"
+}
+
+mavenPublish {
+    targets {
+        // Modify the existing uploadArchives task
+        uploadArchives {
+            // stagingProfile = "de.jensklingenberg" // defaults to the SONATYPE_STAGING_PROFILE Gradle property or the GROUP Gradle Property if not set
+            releaseRepositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            snapshotRepositoryUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+
+        }
+
+
     }
 }

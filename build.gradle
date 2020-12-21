@@ -16,6 +16,8 @@ buildscript {
         classpath "com.android.tools.build:gradle:4.0.2"
         classpath "de.jensklingenberg.cabret:cabret-gradle:1.0.0"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.0.0'
 
     }
 
@@ -23,8 +25,10 @@ buildscript {
 
 plugins {
     id 'org.jetbrains.kotlin.multiplatform' version '1.4.21' apply false
+    id "maven"
 
 }
+
 allprojects {
     repositories {
         google()

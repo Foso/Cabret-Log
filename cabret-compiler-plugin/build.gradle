@@ -1,15 +1,27 @@
-plugins {
-    id 'org.jetbrains.kotlin.jvm'
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+    }
+}
 
+plugins {
+    id 'io.codearte.nexus-staging' version '0.21.0'
+
+    id 'org.jetbrains.kotlin.jvm'
+    id 'com.gradle.plugin-publish' version '0.11.0'
+    id 'signing'
 }
 
 apply plugin: "kotlin-kapt"
 apply plugin: "maven"
-
+apply plugin: 'com.bmuschko.nexus'
 
 group = "de.jensklingenberg.cabret"
 archivesBaseName = "cabret-compiler-plugin"
-version = "1.0.0"
+version = "1.0.1"
 
 install {
     repositories.mavenInstaller {
@@ -41,4 +53,49 @@ build{
     dependsOn ':cabret-compiler-runtime:install'
 
     finalizedBy(install)
+}
+
+
+modifyPom {
+    project {
+        name 'CabretCompilerPlugin'
+        description 'Compiler Plugin for Cabret-Log'
+        url 'https://github.com/Foso/Cabret-Log'
+        inceptionYear '2020'
+        scm {
+            url 'https://github.com/Foso/Cabret-Log'
+            connection 'scm:https://github.com/Foso/Cabret-Log.git'
+            developerConnection 'scm:git://github.com/Foso/Cabret-Log.git'
+        }
+        licenses {
+            license {
+                name 'The Apache Software License, Version 2.0'
+                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                distribution 'repo'
+            }
+        }
+        developers {
+            developer {
+                id 'Foso'
+                name 'Jens Klingenberg'
+                email 'mail@jensklingenberg.de'
+            }
+        }
+    }
+}
+
+extraArchive {
+    sources = true
+    tests = true
+    javadoc = true
+}
+nexus {
+    sign = true
+    repositoryUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+    snapshotRepositoryUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+}
+
+nexusStaging {
+    packageGroup = "de.jensklingenberg" //optional if packageGroup == project.getGroup()
+    stagingProfileId = "d56228753311b0" //when not defined will be got from server using "packageGroup"
 }

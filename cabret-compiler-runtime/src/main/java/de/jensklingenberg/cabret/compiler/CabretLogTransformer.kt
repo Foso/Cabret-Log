@@ -137,7 +137,7 @@ class CabretLogTransformer(
         }
 
         val logLevelString =
-            (findByName("logLevel")?.second as IrGetEnumValueImpl).symbol.signature.asPublic()?.declarationFqName?.substringAfterLast(
+            (findByName("logLevel")?.second as? IrGetEnumValueImpl)?.symbol?.signature?.asPublic()?.declarationFqName?.substringAfterLast(
                 "."
             ) ?: ""
 

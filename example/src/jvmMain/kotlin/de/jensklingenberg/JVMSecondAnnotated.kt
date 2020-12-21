@@ -2,12 +2,14 @@ package de.jensklingenberg
 
 import de.jensklingenberg.cabret.Cabret
 import de.jensklingenberg.cabret.DebugLog
+import test.commonLog
 
 
 fun main() {
 
     logit("hh")
-    logitT2("hh")
+    commonLog("hh")
+
 
 }
 

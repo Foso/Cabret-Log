@@ -5,3 +5,4 @@ include ':cabret-compiler-plugin'
 include ':cabret-log'
 
 include ':cabret-compiler-runtime'
+enableFeaturePreview("GRADLE_METADATA")

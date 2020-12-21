@@ -1,8 +1,12 @@
 
+
 plugins {
-    id "maven"
+    id 'io.codearte.nexus-staging' version '0.21.0'
+    id 'com.gradle.plugin-publish' version '0.11.0'
     id("maven-publish")
+    id "com.vanniktech.maven.publish" version "0.13.0"
 }
+
 apply plugin: 'kotlin-multiplatform'
 //apply plugin: 'com.android.library'
 
@@ -105,3 +109,27 @@ proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard
  */
 
 build.finalizedBy(publishToMavenLocal)
+
+
+
+nexusStaging {
+    packageGroup = "de.jensklingenberg" //optional if packageGroup == project.getGroup()
+    stagingProfileId = "d56228753311b0" //when not defined will be got from server using "packageGroup"
+}
+
+def uploadArchives = false
+if(uploadArchives){
+    mavenPublish {
+        targets {
+            // Modify the existing uploadArchives task
+            uploadArchives {
+                stagingProfile = "de.jensklingenberg" // defaults to the SONATYPE_STAGING_PROFILE Gradle property or the GROUP Gradle Property if not set
+                releaseRepositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+                snapshotRepositoryUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+
+            }
+
+
+        }
+    }
+}

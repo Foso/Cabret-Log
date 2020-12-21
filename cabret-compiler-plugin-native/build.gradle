@@ -1,29 +1,16 @@
-buildscript {
-    ext.kotlin_version = '1.4.21'
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+    id 'maven-publish'
+    id("org.jetbrains.dokka") version "1.4.20"
+    id "com.vanniktech.maven.publish" version "0.13.0"
+    id 'io.codearte.nexus-staging' version '0.21.0'
+    id 'com.gradle.plugin-publish' version '0.11.0'
 
-
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.github.jengelman.gradle.plugins:shadow:5.2.0'
-
-    }
-
-    allprojects {
-        repositories {
-            mavenLocal()
-            jcenter()
-        }
-    }
 }
 
-apply plugin: "org.jetbrains.kotlin.jvm"
 apply plugin: "kotlin-kapt"
 apply plugin: "maven"
 apply plugin: 'com.github.johnrengelman.shadow'
-apply plugin: 'maven-publish'
 
 group = "de.jensklingenberg.cabret"
 archivesBaseName = "cabret-compiler-plugin-native"
@@ -47,15 +34,6 @@ dependencies {
     compileOnly "com.google.auto.service:auto-service:1.0-rc6"
     kapt "com.google.auto.service:auto-service:1.0-rc6"
     compile project(':cabret-compiler-runtime')
-}
-
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: uri("${System.getProperty('user.home')}/.m2/repository"))
-        }
-    }
 }
 
 
@@ -84,16 +62,23 @@ shadowJar {
 
 
 
-publishing {
-    publications {
-        shadow(MavenPublication) { publication ->
-            project.shadow.component(publication)
+
+
+nexusStaging {
+    packageGroup = "de.jensklingenberg" //optional if packageGroup == project.getGroup()
+    stagingProfileId = "d56228753311b0" //when not defined will be got from server using "packageGroup"
+}
+mavenPublish {
+    targets {
+        // Modify the existing uploadArchives task
+        uploadArchives {
+            // stagingProfile = "de.jensklingenberg" // defaults to the SONATYPE_STAGING_PROFILE Gradle property or the GROUP Gradle Property if not set
+            releaseRepositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            snapshotRepositoryUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+
         }
-    }
-    repositories {
-        maven {
-            url = uri("${System.getProperty('user.home')}/.m2/repository")
-        }
+
+
     }
 }
 
