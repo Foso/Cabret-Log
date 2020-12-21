@@ -1,4 +1,79 @@
-WIP
+
+<h1 align="center">DebugLog </h1>
+
+[![jCenter](https://img.shields.io/badge/Apache-2.0-green.svg
+)](https://github.com/Foso/DebugLog/blob/master/LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+[![jCenter](https://img.shields.io/badge/Kotlin-1.4.20-green.svg
+)](https://github.com/Foso/Sheasy/blob/master/LICENSE)
+
+
+
+## Introduction 🙋‍♂️
+
+This is an Kotlin Compiler Plugin that enables Annotation-triggered method call logging. 
+ 
+Simply add **@DebugLog** to your methods and it will automatically log all arguments that are passed to the function.
+
+When the following function gets called:
+
+```kotlin
+@DebugLog
+fun doSomething(name: String, age: Int, isLoggedIn: Boolean = false) {
+    //Do something
+}
+
+fun test(){
+  doSomething("Jens",31)
+}
+```
+
+It will log:
+```kotlin
+doSomething() name: Jens age: 31 isLoggedIn: false
+```
+## How does it work?
+At compiling, the compiler plugin checks in the IrGeneration Phase for the @DebugLog annotation. Then it [rewrites the body the function](https://github.com/Foso/DebugLog/blob/6152ffe4a516010a029c2956f8f1ae878712030e/buildSrc/kotlin-plugin/src/main/java/de/jensklingenberg/debuglog/DebugLogTransformer.kt#L90). 
+
+The function:
+
+```kotlin
+@DebugLog
+fun doSomething(name: String, age: Int, isLoggedIn: Boolean = false) {
+    //Do something
+}
+```
+
+will be rewritten to:
+
+```kotlin
+@DebugLog
+fun doSomething(name: String, age: Int, isLoggedIn: Boolean = false) {
+    kotlin.io.println("doSomething() name: $name age: $age isLoggedIn: $isLoggedIn"
+    //Do something
+}
+```
+
+In Android builds it will use **Log.d** instead of **println**
+
+This rewrite will only happen inside the compiler plugin at compile time. No .kt/source files will be changed.
+
+### 👷 Project Structure
+* <kbd>androidSample</kbd> - A basic Android app that is using the debuglog compiler plugin
+* <kbd>src</kbd> - A Kotlin Multiplatform project that is using the debuglog compiler plugin
+
+
+#### buildSrc
+ *  <kbd>kotlin-compiler-native-plugin</kbd> - This module contains the Kotlin Compiler Plugin for native targets
+ *  <kbd>kotlin-compiler-plugin</kbd> - This module contains the Kotlin Compiler Plugin for JVM/JS targets
+ *  <kbd>gradle-plugin</kbd> - This module contains the gradle plugin which trigger the two compiler plugins
+ *  <kbd>annotations</kbd> - This module contains the debuglog annotations
+
+## Usage
+For now the plugin only exists in this project. Maybe i will upload it to MavenCentral, when i make some more changes.
+
+If you want to try it you can:
+Run the Android app inside androidSample or run the main() inside /src
 
 ### Find this project useful ? :heart:
 * Support it by clicking the :star: button on the upper right of this page. :v:
