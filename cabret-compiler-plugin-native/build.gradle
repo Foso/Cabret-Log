@@ -14,7 +14,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 
 group = "de.jensklingenberg.cabret"
 archivesBaseName = "cabret-compiler-plugin-native"
-version = "1.0.0"
+version = "1.0.1"
 
 install {
     repositories.mavenInstaller {
@@ -44,7 +44,7 @@ task fatJar(type: Jar) {
                 'Main-Class': 'de.jensklingenberg.cabret.NativeComponentRegistrar'
     }
     baseName = "cabret-compiler-plugin-native"
-    version = "1.0.0"
+    version = "1.0.1"
 
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
