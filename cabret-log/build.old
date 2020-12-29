@@ -1,0 +1,124 @@
+
+
+plugins {
+    id 'io.codearte.nexus-staging' version '0.21.0'
+    id 'com.gradle.plugin-publish' version '0.11.0'
+    id "com.vanniktech.maven.publish" version "0.13.0"
+}
+
+apply plugin: 'kotlin-multiplatform'
+//apply plugin: 'com.android.library'
+
+group = "de.jensklingenberg.cabret"
+archivesBaseName = "cabretlog"
+version = "1.0.0"
+
+
+repositories {
+    google()
+    mavenCentral()
+}
+
+kotlin {
+
+    jvm()
+    js(IR) {
+        browser()
+        nodejs()
+        binaries.executable()
+    }
+    linuxX64("linux")
+    // android() {
+    // publishLibraryVariants("release", "debug")
+    // }
+
+    ios('ios') {
+        binaries {
+            framework {
+                baseName = 'library'
+            }
+        }
+    }
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation kotlin('stdlib-common')
+
+            }
+        }
+        commonTest {
+            dependencies {
+                implementation kotlin('test-common')
+                implementation kotlin('test-annotations-common')
+            }
+        }
+
+        jsMain {
+            dependencies {
+                implementation kotlin('stdlib-js')
+
+            }
+        }
+        jsTest {
+            dependencies {
+                implementation kotlin('test-js')
+            }
+        }
+
+        jvmMain {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+            }
+        }
+        jsTest {
+            dependencies {
+                implementation kotlin('test-js')
+            }
+        }
+        // androidMain{}
+
+        iosMain {
+
+        }
+
+    }
+}
+
+if(false){
+    android {
+        compileSdkVersion 30
+        defaultConfig {
+            minSdkVersion 21
+            targetSdkVersion 30
+            versionCode 1
+            versionName '0.1'
+            testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+        }
+        sourceSets {
+            main {
+                manifest.srcFile 'src/androidMain/AndroidManifest.xml'
+                java.srcDirs = ['src/androidMain/kotlin']
+                res.srcDirs = ['src/androidMain/res']
+            }
+
+            test {
+                java.srcDirs = ['src/androidTest/kotlin']
+                res.srcDirs = ['src/androidTest/res']
+            }
+        }
+        testOptions.unitTests.includeAndroidResources = true
+
+        buildTypes {
+            debug {}
+            release {
+                minifyEnabled false
+                proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            }
+        }
+    }
+}
+
+
+build.finalizedBy(publishToMavenLocal)
+
+

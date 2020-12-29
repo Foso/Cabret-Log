@@ -1,3 +1,10 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        jcenter()
+    }
+}
+
 include 'example'
 include ':cabret-compiler-plugin-native'
 include ':cabret-compiler-plugin'
@@ -6,3 +13,4 @@ include ':cabret-log'
 
 include ':cabret-compiler-runtime'
 enableFeaturePreview("GRADLE_METADATA")
+

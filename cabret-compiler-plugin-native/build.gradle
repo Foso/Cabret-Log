@@ -1,8 +1,8 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm'
     id 'maven-publish'
-    id("org.jetbrains.dokka") version "1.4.20"
-    id "com.vanniktech.maven.publish" version "0.13.0"
+    id("org.jetbrains.dokka")
+    id "com.vanniktech.maven.publish"
     id 'io.codearte.nexus-staging' version '0.21.0'
     id 'com.gradle.plugin-publish' version '0.11.0'
 
@@ -68,6 +68,7 @@ nexusStaging {
     packageGroup = "de.jensklingenberg" //optional if packageGroup == project.getGroup()
     stagingProfileId = "d56228753311b0" //when not defined will be got from server using "packageGroup"
 }
+
 mavenPublish {
     targets {
         // Modify the existing uploadArchives task
@@ -95,4 +96,11 @@ build{
     dependsOn ':cabret-compiler-runtime:install'
     dependsOn(shadowJar)
     finalizedBy(publishToMavenLocal)
+}
+
+
+
+task JavadocsJar(type: Jar) {
+    classifier = 'javadoc'
+    from "$buildDir/javadoc"
 }

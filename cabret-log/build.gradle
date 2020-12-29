@@ -1,38 +1,42 @@
-
-
+import org.gradle.api.publish.maven.MavenPublication
 plugins {
-    id 'io.codearte.nexus-staging' version '0.21.0'
-    id 'com.gradle.plugin-publish' version '0.11.0'
+    id("maven")
     id("maven-publish")
-    id "com.vanniktech.maven.publish" version "0.13.0"
+    id 'signing'
+    id "com.vanniktech.maven.publish"
+    id("org.jetbrains.dokka")
+
 }
 
 apply plugin: 'kotlin-multiplatform'
-//apply plugin: 'com.android.library'
-
-group = "de.jensklingenberg.cabret"
-archivesBaseName = "cabretlog"
-version = "1.0.0"
-
+apply plugin: 'com.android.library'
 
 repositories {
     google()
     mavenCentral()
+    jcenter()
 }
 
 kotlin {
 
     jvm()
-    js(IR){
+    js(IR) {
         browser()
         nodejs()
         binaries.executable()
     }
     linuxX64("linux")
-    // android() {
-    // publishLibraryVariants("release", "debug")
-    // }
+    android() {
+        publishLibraryVariants("release", "debug")
+    }
 
+    ios('ios') {
+        binaries {
+            framework {
+                baseName = 'library'
+            }
+        }
+    }
     sourceSets {
         commonMain {
             dependencies {
@@ -69,67 +73,50 @@ kotlin {
                 implementation kotlin('test-js')
             }
         }
-        // androidMain{}
+        androidMain {}
 
-    }
-}
-
-
-/**
- * android {
-compileSdkVersion 28
-defaultConfig {
-minSdkVersion 21
-targetSdkVersion 28
-versionCode 1
-versionName '0.1'
-testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
-}
-sourceSets {
-main {
-manifest.srcFile 'src/androidMain/AndroidManifest.xml'
-java.srcDirs = ['src/androidMain/kotlin']
-res.srcDirs = ['src/androidMain/res']
-}
-test {
-java.srcDirs = ['src/androidTest/kotlin']
-res.srcDirs = ['src/androidTest/res']
-}
-}
-testOptions.unitTests.includeAndroidResources = true
-
-buildTypes {
-debug{}
-release {
-minifyEnabled false
-proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-}
-}
-}
- */
-
-build.finalizedBy(publishToMavenLocal)
-
-
-
-nexusStaging {
-    packageGroup = "de.jensklingenberg" //optional if packageGroup == project.getGroup()
-    stagingProfileId = "d56228753311b0" //when not defined will be got from server using "packageGroup"
-}
-
-def uploadArchives = false
-if(uploadArchives){
-    mavenPublish {
-        targets {
-            // Modify the existing uploadArchives task
-            uploadArchives {
-                stagingProfile = "de.jensklingenberg" // defaults to the SONATYPE_STAGING_PROFILE Gradle property or the GROUP Gradle Property if not set
-                releaseRepositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-                snapshotRepositoryUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
-
-            }
-
+        iosMain {
 
         }
+
     }
+
+}
+
+android {
+    compileSdkVersion 30
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName '0.1'
+        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+    }
+    sourceSets {
+        main {
+            manifest.srcFile 'src/androidMain/AndroidManifest.xml'
+            java.srcDirs = ['src/androidMain/kotlin']
+            res.srcDirs = ['src/androidMain/res']
+        }
+
+        test {
+            java.srcDirs = ['src/androidTest/kotlin']
+            res.srcDirs = ['src/androidTest/res']
+        }
+    }
+    testOptions.unitTests.includeAndroidResources = true
+
+    buildTypes {
+        debug {}
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+//build.finalizedBy(publishToMavenLocal)
+
+configurations { // Seems to be a hack for a gradle bug.
+    compileClasspath
 }
