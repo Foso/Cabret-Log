@@ -1,33 +1,22 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
-    }
-}
-
 plugins {
-    id 'io.codearte.nexus-staging' version '0.21.0'
-
+    id("maven")
     id 'org.jetbrains.kotlin.jvm'
-    id 'com.gradle.plugin-publish' version '0.11.0'
+    id 'maven-publish'
     id 'signing'
+    id("org.jetbrains.dokka")
+    id "com.vanniktech.maven.publish"
+    id "com.github.johnrengelman.shadow" version "6.1.0"
 }
 
 apply plugin: "kotlin-kapt"
-apply plugin: "maven"
-apply plugin: 'com.bmuschko.nexus'
+
+def pluginVersion = "1.0.2"
+
 
 group = "de.jensklingenberg.cabret"
 archivesBaseName = "cabret-compiler-plugin"
-version = "1.0.1"
+version = pluginVersion
 
-install {
-    repositories.mavenInstaller {
-        pom.artifactId = archivesBaseName
-    }
-}
 
 repositories {
     mavenLocal()
@@ -36,11 +25,9 @@ repositories {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
     implementation project(':cabret-compiler-runtime')
-
-    implementation "org.jetbrains.kotlin:kotlin-gradle-plugin-api"
     compileOnly "org.jetbrains.kotlin:kotlin-compiler-embeddable"
-    compileOnly "com.google.auto.service:auto-service:1.0-rc6"
-    kapt "com.google.auto.service:auto-service:1.0-rc6"
+    compileOnly "com.google.auto.service:auto-service:1.0-rc7"
+    kapt "com.google.auto.service:auto-service:1.0-rc7"
 }
 
 compileKotlin {
@@ -49,53 +36,53 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Jar File Example',
+                'Implementation-Version': version,
+                'Main-Class': 'de.jensklingenberg.cabret.PluginComponentRegistrar'
+    }
+    baseName = "cabret-compiler-plugin"
+    version = pluginVersion
+
+    from {
+        configurations.compileOnly.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    with jar
+}
+
+
+shadowJar {
+    manifest {
+        inheritFrom project.tasks.fatJar.manifest
+    }
+    baseName = "cabret-compiler-plugin"
+    version = pluginVersion
+    classifier = ""
+
+}
+
+kapt {
+    includeCompileClasspath = true
+}
+
+install{
+    dependsOn(shadowJar)
+}
+
 build{
     dependsOn ':cabret-compiler-runtime:install'
-
-    finalizedBy(install)
+    dependsOn(install)
+    finalizedBy(publishToMavenLocal)
 }
 
 
-modifyPom {
-    project {
-        name 'CabretCompilerPlugin'
-        description 'Compiler Plugin for Cabret-Log'
-        url 'https://github.com/Foso/Cabret-Log'
-        inceptionYear '2020'
-        scm {
-            url 'https://github.com/Foso/Cabret-Log'
-            connection 'scm:https://github.com/Foso/Cabret-Log.git'
-            developerConnection 'scm:git://github.com/Foso/Cabret-Log.git'
-        }
-        licenses {
-            license {
-                name 'The Apache Software License, Version 2.0'
-                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                distribution 'repo'
-            }
-        }
-        developers {
-            developer {
-                id 'Foso'
-                name 'Jens Klingenberg'
-                email 'mail@jensklingenberg.de'
-            }
-        }
-    }
+
+task JavadocsJar(type: Jar) {
+    classifier = 'javadoc'
+    from "$buildDir/javadoc"
 }
 
-extraArchive {
-    sources = true
-    tests = true
-    javadoc = true
-}
-nexus {
-    sign = true
-    repositoryUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-    snapshotRepositoryUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
-}
 
-nexusStaging {
-    packageGroup = "de.jensklingenberg" //optional if packageGroup == project.getGroup()
-    stagingProfileId = "d56228753311b0" //when not defined will be got from server using "packageGroup"
-}

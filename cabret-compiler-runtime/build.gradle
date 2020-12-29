@@ -3,17 +3,14 @@ plugins {
     id 'maven-publish'
     id("org.jetbrains.dokka")
     id "com.vanniktech.maven.publish"
-    id 'io.codearte.nexus-staging' version '0.21.0'
     id 'com.gradle.plugin-publish' version '0.11.0'
+    id("maven")
 
 }
 
-apply plugin: "maven"
-
-
 group = "de.jensklingenberg.cabret"
 archivesBaseName = "cabret-compiler-runtime"
-version = "1.0.0"
+version = "1.0.2"
 
 install {
     repositories.mavenInstaller {
@@ -28,7 +25,7 @@ repositories {
 dependencies {
     compileOnly "org.jetbrains.kotlin:kotlin-compiler-embeddable"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib"
-    implementation "de.jensklingenberg.cabret:cabretlog-jvm:1.0.0"
+    implementation "de.jensklingenberg.cabret:cabret-log-jvm:1.0.2"
 
     testImplementation("org.jetbrains.kotlin:kotlin-compiler-embeddable")
     testImplementation("com.github.tschuchortdev:kotlin-compile-testing:1.3.3")
@@ -52,11 +49,6 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
     }
 }
 
-nexusStaging {
-    packageGroup = "de.jensklingenberg" //optional if packageGroup == project.getGroup()
-    stagingProfileId = "d56228753311b0" //when not defined will be got from server using "packageGroup"
-}
-
 mavenPublish {
     targets {
         // Modify the existing uploadArchives task
@@ -66,7 +58,6 @@ mavenPublish {
             snapshotRepositoryUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
 
         }
-
 
     }
 }

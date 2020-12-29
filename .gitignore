@@ -13,3 +13,6 @@
 /buildSrc/.gradle/
 /cabret-compiler-runtime/build/
 /cabret-gradle/build/
+/buildSrc/annotations/build/
+/buildSrc/compiler-plugin/kotlin-native-plugin/build/
+/buildSrc/gradle-plugin/build/

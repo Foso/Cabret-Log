@@ -1,27 +1,27 @@
 plugins {
+    id("maven")
     id 'org.jetbrains.kotlin.jvm'
     id 'maven-publish'
     id("org.jetbrains.dokka")
     id "com.vanniktech.maven.publish"
-    id 'io.codearte.nexus-staging' version '0.21.0'
-
-
+    id "com.github.johnrengelman.shadow" version "6.1.0"
 }
 
+def pluginVersion = "1.0.2"
+
 apply plugin: "kotlin-kapt"
-apply plugin: "maven"
-apply plugin: 'com.github.johnrengelman.shadow'
+
 
 group = "de.jensklingenberg.cabret"
 archivesBaseName = "cabret-compiler-plugin-native"
-version = "1.0.1"
+version = pluginVersion
+
 
 install {
     repositories.mavenInstaller {
         pom.artifactId = archivesBaseName
     }
 }
-
 repositories {
     mavenLocal()
 }
@@ -31,8 +31,8 @@ compileKotlin {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
     compileOnly "org.jetbrains.kotlin:kotlin-compiler"
-    compileOnly "com.google.auto.service:auto-service:1.0-rc6"
-    kapt "com.google.auto.service:auto-service:1.0-rc6"
+    compileOnly "com.google.auto.service:auto-service:1.0-rc7"
+    kapt "com.google.auto.service:auto-service:1.0-rc7"
     implementation project(':cabret-compiler-runtime')
 }
 
@@ -44,9 +44,12 @@ task fatJar(type: Jar) {
                 'Main-Class': 'de.jensklingenberg.cabret.NativeComponentRegistrar'
     }
     baseName = "cabret-compiler-plugin-native"
-    version = "1.0.1"
+    version = pluginVersion
 
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    from {
+        configurations.compileOnly.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
     with jar
 }
 
@@ -56,33 +59,9 @@ shadowJar {
         inheritFrom project.tasks.fatJar.manifest
     }
     baseName = "cabret-compiler-plugin-native"
-    version = "1.0.1"
-    classifier = null
+    version = pluginVersion
+    classifier = ""
 }
-
-
-
-
-
-nexusStaging {
-    packageGroup = "de.jensklingenberg" //optional if packageGroup == project.getGroup()
-    stagingProfileId = "d56228753311b0" //when not defined will be got from server using "packageGroup"
-}
-
-mavenPublish {
-    targets {
-        // Modify the existing uploadArchives task
-        uploadArchives {
-            // stagingProfile = "de.jensklingenberg" // defaults to the SONATYPE_STAGING_PROFILE Gradle property or the GROUP Gradle Property if not set
-            releaseRepositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-            snapshotRepositoryUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
-
-        }
-
-
-    }
-}
-
 
 kapt {
     includeCompileClasspath = true
