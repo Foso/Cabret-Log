@@ -1,0 +1,66 @@
+
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.4.21'
+    id 'com.gradle.plugin-publish' version '0.11.0'
+    id 'signing'
+    id 'io.codearte.nexus-staging' version '0.21.0'
+
+
+}
+apply plugin: "java-gradle-plugin"
+apply plugin: "kotlin-kapt"
+apply plugin: "maven"
+
+group = "de.jensklingenberg.cabret"
+archivesBaseName = "cabret-gradle"
+version = "1.0.2"
+
+repositories {
+    mavenLocal()
+    google()
+    jcenter()
+    mavenCentral()
+}
+
+install {
+    repositories.mavenInstaller {
+        pom.artifactId = archivesBaseName
+    }
+}
+
+gradlePlugin {
+    plugins {
+        simplePlugin {
+            id = "de.jensklingenberg.cabret" // users will do `apply plugin: "de.jensklingenberg.cabret"`
+            implementationClass = "de.jensklingenberg.gradle.CabretGradleSubplugin" // entry-point class
+        }
+    }
+}
+
+dependencies {
+
+    implementation "org.jetbrains.kotlin:kotlin-gradle-plugin-api:1.4.21"
+
+}
+
+pluginBundle {
+    website = 'https://github.com/Foso/Cabret-Log'
+    vcsUrl = 'https://github.com/Foso/Cabret-Log.git'
+    tags = ['kotlin', 'logging']
+
+    plugins {
+        simplePlugin {
+            id = "de.jensklingenberg.cabret" // users will do `apply plugin: "de.jensklingenberg.cabret"`
+            // id is captured from java-gradle-plugin configuration
+            displayName = 'Cabret Gradle Plugin'
+            description = 'Plugin for annotation-triggered method call logging'
+        }
+    }
+}
+
+
+
+
+build.finalizedBy(install)
+
+

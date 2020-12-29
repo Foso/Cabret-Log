@@ -4,7 +4,7 @@ pluginManagement {
         jcenter()
     }
 }
-includeBuild 'cabret-gradle'
+includeBuild 'gradle-plugin'
 
 include 'example'
 include ':cabret-compiler-plugin-native'
