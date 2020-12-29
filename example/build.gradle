@@ -6,7 +6,7 @@ apply plugin: 'de.jensklingenberg.cabret'
 
 cabret {
     enabled = true
-
+    version = "1.0.1"
 }
 
 System.setProperty("kotlin.compiler.execution.strategy", "in-process") // For debugging
@@ -60,11 +60,12 @@ kotlin {
         }
     }
 
+
     sourceSets {
         commonMain {
             dependencies {
                 implementation kotlin('stdlib-common')
-                implementation "de.jensklingenberg.cabret:cabret-log:1.0.0"
+                implementation "de.jensklingenberg.cabret:cabretlog:1.0.0"
 
             }
         }
@@ -103,7 +104,7 @@ kotlin {
 
         linuxMain {
             dependencies {
-                implementation "de.jensklingenberg.cabret:cabret-log-linux:1.0.0"
+                implementation "de.jensklingenberg.cabret:cabretlog-linux:1.0.0"
 
 
             }
