@@ -1,5 +1,5 @@
 
-<h1 align="center"> Cabret </h1>
+<h1 align="center">:pencil2: Cabret :pencil2:</h1>
 
 [![jCenter](https://img.shields.io/badge/Apache-2.0-green.svg
 )](https://github.com/Foso/DebugLog/blob/master/LICENSE)
