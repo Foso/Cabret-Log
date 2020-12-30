@@ -19,18 +19,22 @@ When the following function gets called:
 
 ```kotlin
 @DebugLog
-fun doSomething(name: String, age: Int, isLoggedIn: Boolean = false) {
-    //Do something
-}
+fun exampleFun(
+    first: String,
+    last: String,
+    age: Int = 31,
+    isLoggedIn: Boolean = false
+): String = "$first $last"
 
-fun test(){
-  doSomething("Jens",31)
+fun main(){
+  exampleFun("Jens","Klingenberg")
 }
 ```
 
 It will log:
 ```kotlin
-doSomething() name: Jens age: 31 isLoggedIn: false
+Example -> exampleFun( first= Jens, last= Klingenberg, age= 31, isLoggedIn= false)
+Example <- exampleFun() [2.63ms] =  Jens Klingenberg
 ```
 ## How does it work?
 At compiling, the compiler plugin checks in the IrGeneration Phase for the @DebugLog annotation. Then it [rewrites the body the function](https://github.com/Foso/DebugLog/blob/6152ffe4a516010a029c2956f8f1ae878712030e/buildSrc/kotlin-plugin/src/main/java/de/jensklingenberg/debuglog/DebugLogTransformer.kt#L90). 
