@@ -92,8 +92,7 @@ You can add dependency to the required module right to the common source set:
 ```gradle
 commonMain {
     dependencies {
-        // Works as common dependency as well as the platform one
-        implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization_version"
+        implementation "de.jensklingenberg.cabret:cabret-log:$cabretVersion"
     }
 }
 ```
