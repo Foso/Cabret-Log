@@ -188,6 +188,9 @@ Cabret.addListener(object :Cabret.Listener{
 *  <kbd>cabret-log</kbd> - A Kotlin Multiplatform project with the DebugLog annotation and the default loggers
 *  <kbd>DemoProject</kbd> - A Kotlin Multiplatform project that is using the debuglog compiler plugin
 
+## ✍️ Feedback
+
+Feel free to send feedback on [Twitter](https://twitter.com/jklingenberg_) or [file an issue](https://github.com/foso/Cabret-Log/issues/new). Feature requests are always welcome.
 
 ## 📜 License
 
