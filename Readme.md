@@ -94,7 +94,7 @@ To be able to use the DebugLog annotation, you also need add the dependecies on 
 
 #### Multiplatform (Common, JS, Native)
 
-You can add dependency to the required module right to the common source set:
+You can add dependency to the right to the common source set:
 ```gradle
 commonMain {
     dependencies {
@@ -102,7 +102,6 @@ commonMain {
     }
 }
 ```
-The same artifact coordinates can be used to depend on platform-specific artifact in platform-specific source-set.
 
 #### Platform-specific 
 You can also add platform-specific dependecies
