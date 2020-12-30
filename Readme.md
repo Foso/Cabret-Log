@@ -160,7 +160,12 @@ target {
 
 You can add a tag to the DebugLog annotation under which you can find your logged data. When you don't add a custom tag, Cabret will use the file name for top level function and the class name for class functions as the tag.
 
+### LogLevel
+```kotlin
+@DebugLog(logLevel = Cabret.LogLevel.ERROR)
+```
 
+You can set a LogLevel to the DebugLog Annotation. You can choose between VERBOSE, DEBUG, INFO, WARN or ERROR. By default DEBUG is selected. 
 
 
 ### 👷 Project Structure
