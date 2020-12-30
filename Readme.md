@@ -181,19 +181,14 @@ Cabret.addListener(object :Cabret.Listener{
 ```
 
 ### 👷 Project Structure
-* <kbd>androidSample</kbd> - A basic Android app that is using the debuglog compiler plugin
-* <kbd>src</kbd> - A Kotlin Multiplatform project that is using the debuglog compiler plugin
 
+*  <kbd>cabret-compiler-plugin</kbd> - This module contains the Kotlin Compiler Plugin for JVM/JS targets
+*  <kbd>cabret-compiler-native-plugin</kbd> - This module contains the Kotlin Compiler Plugin for native targets
+*  <kbd>cabret-compiler-runtime</kbd> - This module contains the shared Kotlin Compiler Plugin Logic for JVM/JS/Native compiler
+*  <kbd>cabret-gradle</kbd> - This module contains the gradle plugin which triggers the two compiler plugins
+*  <kbd>cabret-log</kbd> - A Kotlin Multiplatform project with the DebugLog annotation and the default loggers
+*  <kbd>DemoProject</kbd> - A Kotlin Multiplatform project that is using the debuglog compiler plugin
 
-#### buildSrc
- *  <kbd>kotlin-compiler-native-plugin</kbd> - This module contains the Kotlin Compiler Plugin for native targets
- *  <kbd>kotlin-compiler-plugin</kbd> - This module contains the Kotlin Compiler Plugin for JVM/JS targets
- *  <kbd>gradle-plugin</kbd> - This module contains the gradle plugin which trigger the two compiler plugins
- *  <kbd>annotations</kbd> - This module contains the debuglog annotations
-
-
-### Find this project useful ? :heart:
-* Support it by clicking the :star: button on the upper right of this page. :v:
 
 ## 📜 License
 
