@@ -36,6 +36,53 @@ It will log:
 Example -> exampleFun( first= Jens, last= Klingenberg, age= 31, isLoggedIn= false)
 Example <- exampleFun() [2.63ms] =  Jens Klingenberg
 ```
+
+## Usage
+### Gradle Plugin
+
+Add the dependency to your buildscript
+
+```groovy
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "de.jensklingenberg.cabret:cabret-gradle:1.0.3"
+    }
+}
+
+```
+#### Apply the plugin
+
+
+Kotlin DSL:
+
+```kotlin
+plugins {
+     id("de.jensklingenberg.cabret")
+}
+
+configure<de.jensklingenberg.gradle.CabretGradleExtension> {
+    enabled = true
+}
+```       
+
+Groovy DSL:
+
+```gradle
+plugins {
+    id 'de.jensklingenberg.cabret'
+}
+
+cabret {
+    enabled = true
+}
+```
+
+
+
 ## How does it work?
 At compiling, the compiler plugin checks in the IrGeneration Phase for the @DebugLog annotation. Then it [rewrites the body the function](https://github.com/Foso/DebugLog/blob/6152ffe4a516010a029c2956f8f1ae878712030e/buildSrc/kotlin-plugin/src/main/java/de/jensklingenberg/debuglog/DebugLogTransformer.kt#L90). 
 
