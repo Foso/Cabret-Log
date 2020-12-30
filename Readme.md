@@ -81,6 +81,12 @@ cabret {
 }
 ```
 
+The plugin will only be active when **enabled** is set to **true**
+
+### Log Library
+To able able to use the DebugLog annotation, you also need add the dependecies on cabret-log.
+
+
 
 
 ## How does it work?
