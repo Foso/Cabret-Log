@@ -144,6 +144,17 @@ target {
 }
 ```
 
+## Logging
+
+### Tag
+
+```kotlin
+@DebugLog( tag = "MyTag")
+```
+
+You can add a tag to the DebugLog annotation under which you can find your logged data. When you don't add a custom tag, Cabret will use the file name for top level function and the class name for class functions as the tag.
+
+
 ## How does it work?
 At compiling, the compiler plugin checks in the IrGeneration Phase for the @DebugLog annotation. Then it [rewrites the body the function](https://github.com/Foso/DebugLog/blob/6152ffe4a516010a029c2956f8f1ae878712030e/buildSrc/kotlin-plugin/src/main/java/de/jensklingenberg/debuglog/DebugLogTransformer.kt#L90). 
 
