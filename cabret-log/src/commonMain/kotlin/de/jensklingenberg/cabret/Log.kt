@@ -1,11 +1,14 @@
 package de.jensklingenberg.cabret
 
+import kotlin.native.concurrent.ThreadLocal
+
 
 @Target(AnnotationTarget.FUNCTION)
 annotation class DebugLog(val logLevel: Cabret.LogLevel = Cabret.LogLevel.DEBUG,val tag:String="")
 
-
+@ThreadLocal
 object LogHandler {
+
 
     private var listener: Cabret.Listener = DefaultListener()
 

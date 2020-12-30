@@ -6,7 +6,7 @@ import de.jensklingenberg.cabret.cabretdemo.shared.Greeting
 import android.widget.TextView
 
 fun greet(): String {
-    return Greeting().greeting()
+    return Greeting().greeting("Hello from Android")
 }
 
 class MainActivity : AppCompatActivity() {

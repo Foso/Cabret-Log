@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.gradle.plugin.SubpluginOption
 
 open class CabretGradleExtension {
     var enabled: Boolean = true
-    var version: String = "1.0.0"
+    var version: String = "1.0.2"
 }
 
 

@@ -2,6 +2,7 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         jcenter()
+        mavenCentral()
     }
 }
 includeBuild 'cabret-gradle'

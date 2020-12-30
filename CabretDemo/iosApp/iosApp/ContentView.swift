@@ -2,7 +2,7 @@ import SwiftUI
 import shared
 
 func greet() -> String {
-    return Greeting().greeting()
+    return Greeting().greeting(greetingText: "Hello from iOS")
 }
 
 struct ContentView: View {

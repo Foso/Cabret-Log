@@ -3,17 +3,18 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.4.21'
     id 'com.gradle.plugin-publish' version '0.11.0'
     id 'signing'
-    id 'io.codearte.nexus-staging' version '0.21.0'
-
+    id "com.vanniktech.maven.publish" version '0.13.0'
+    id("maven")
+    id("org.jetbrains.dokka") version '1.4.20'
 
 }
 apply plugin: "java-gradle-plugin"
 apply plugin: "kotlin-kapt"
-apply plugin: "maven"
+
 
 group = "de.jensklingenberg.cabret"
 archivesBaseName = "cabret-gradle"
-version = "1.0.2"
+version = "1.0.3"
 
 repositories {
     mavenLocal()
