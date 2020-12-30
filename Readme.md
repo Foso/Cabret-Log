@@ -167,6 +167,18 @@ You can add a tag to the DebugLog annotation under which you can find your logge
 
 You can set a LogLevel to the DebugLog Annotation. You can choose between VERBOSE, DEBUG, INFO, WARN or ERROR. By default DEBUG is selected. 
 
+### Custom Logger
+By default Cabret will log the data with printLn() or on Android with android.util.Log and the selected LogLevel. E.g. LogLevel.ERROR will be logged with Log.e(), LogLevel.INFO will be logged with Log.i(), etc. 
+
+You can add your own Logger. 
+
+```kotlin
+Cabret.addListener(object :Cabret.Listener{
+    override fun log(tag: String, msg: String, logLevel: Cabret.LogLevel) {
+        //Add your logger here
+    }
+})
+```
 
 ### 👷 Project Structure
 * <kbd>androidSample</kbd> - A basic Android app that is using the debuglog compiler plugin
