@@ -170,7 +170,7 @@ You can set a LogLevel to the DebugLog Annotation. You can choose between VERBOS
 ### Custom Logger
 By default Cabret will log the data with printLn() or on Android with android.util.Log and the selected LogLevel. E.g. LogLevel.ERROR will be logged with Log.e(), LogLevel.INFO will be logged with Log.i(), etc. 
 
-You can add your own Logger. 
+You can add your own Logger. All you need to do is to add your object of Cabret.Listener to Cabret.addListener() somewhere at the beginning of your programm.
 
 ```kotlin
 Cabret.addListener(object :Cabret.Listener{
