@@ -86,7 +86,44 @@ The plugin will only be active when **enabled** is set to **true**
 ### Log Library
 To able able to use the DebugLog annotation, you also need add the dependecies on cabret-log.
 
+#### Multiplatform (Common, JS, Native)
 
+You can add dependency to the required module right to the common source set:
+```gradle
+commonMain {
+    dependencies {
+        // Works as common dependency as well as the platform one
+        implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization_version"
+    }
+}
+```
+The same artifact coordinates can be used to depend on platform-specific artifact in platform-specific source-set.
+
+#### Platform-specific 
+You can also add platform-specific dependecies
+
+```gradle
+sourceSets {
+    jvmMain {
+            dependencies {
+                 implementation "de.jensklingenberg.cabret:cabret-log-jvm:1.0.3"
+            }
+   }
+}
+```
+
+Here's a list of all available targets:
+```gradle
+def cabretVersion = "1.0.3"
+
+implementation "de.jensklingenberg.cabret:cabret-log-jvm:$cabretVersion"
+implementation "de.jensklingenberg.cabret:cabret-log-js:$cabretVersion"
+implementation "de.jensklingenberg.cabret:cabret-log-android:$cabretVersion"
+implementation "de.jensklingenberg.cabret:cabret-log-iosx64:$cabretVersion"
+implementation "de.jensklingenberg.cabret:cabret-log-iosarm64:$cabretVersion"
+implementation "de.jensklingenberg.cabret:cabret-log-linux:$cabretVersion"
+
+```
 
 
 ## How does it work?
