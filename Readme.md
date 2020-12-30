@@ -37,6 +37,10 @@ Example -> exampleFun( first= Jens, last= Klingenberg, age= 31, isLoggedIn= fals
 Example <- exampleFun() [2.63ms] =  Jens Klingenberg
 ```
 
+### Show some :heart: and star the repo to support the project
+
+[![GitHub stars](https://img.shields.io/github/stars/Foso/Cabret-Log.svg?style=social&label=Star)](https://github.com/Foso/Cabret-Log) [![GitHub forks](https://img.shields.io/github/forks/Foso/Cabret-Log.svg?style=social&label=Fork)](https://github.com/Foso/Cabret-Log/fork) [![GitHub watchers](https://img.shields.io/github/watchers/Foso/Cabret-Log.svg?style=social&label=Watch)](https://github.com/Foso/Cabret-Log) [![Twitter Follow](https://img.shields.io/twitter/follow/jklingenberg_.svg?style=social)](https://twitter.com/jklingenberg_)
+
 ## Setup
 > You can take a look at [DemoProject](https://github.com/Foso/Cabret-Log/tree/master/CabretDemo) as an example
 
