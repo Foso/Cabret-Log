@@ -37,8 +37,8 @@ Example -> exampleFun( first= Jens, last= Klingenberg, age= 31, isLoggedIn= fals
 Example <- exampleFun() [2.63ms] =  Jens Klingenberg
 ```
 
-## Usage
-### Gradle Plugin
+## Setup
+### 1) Gradle Plugin
 
 Add the dependency to your buildscript
 
@@ -54,7 +54,7 @@ buildscript {
 }
 
 ```
-#### Apply the plugin
+#### 2) Apply the plugin
 
 
 Kotlin DSL:
@@ -83,7 +83,7 @@ cabret {
 
 The plugin will only be active when **enabled** is set to **true**
 
-### Log Library
+### 3) Log Library
 To able able to use the DebugLog annotation, you also need add the dependecies on cabret-log.
 
 #### Multiplatform (Common, JS, Native)
@@ -125,6 +125,25 @@ implementation "de.jensklingenberg.cabret:cabret-log-linux:$cabretVersion"
 
 ```
 
+### 4) Enable IR
+Cabret is using a Kotlin Compiler Plugin that is using the IR Backend. For Native targets it's already enabled, but you need to activate it in your build.gradle for Kotlin JVM/JS
+
+##### Kotlin/JVM
+```kotlin
+tasks.withType<KotlinCompile>().configureEach {
+  kotlinOptions {
+    useIR = true
+  }
+}
+```
+
+##### Kotlin/JS
+```kotlin
+target {
+  js(IR) {
+  }
+}
+```
 
 ## How does it work?
 At compiling, the compiler plugin checks in the IrGeneration Phase for the @DebugLog annotation. Then it [rewrites the body the function](https://github.com/Foso/DebugLog/blob/6152ffe4a516010a029c2956f8f1ae878712030e/buildSrc/kotlin-plugin/src/main/java/de/jensklingenberg/debuglog/DebugLogTransformer.kt#L90). 
