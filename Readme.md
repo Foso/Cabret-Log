@@ -38,6 +38,8 @@ Example <- exampleFun() [2.63ms] =  Jens Klingenberg
 ```
 
 ## Setup
+> You can take a look at [DemoProject](https://github.com/Foso/Cabret-Log/tree/master/CabretDemo) as an example
+
 ### 1) Gradle Plugin
 
 Add the dependency to your buildscript
@@ -155,31 +157,7 @@ target {
 You can add a tag to the DebugLog annotation under which you can find your logged data. When you don't add a custom tag, Cabret will use the file name for top level function and the class name for class functions as the tag.
 
 
-## How does it work?
-At compiling, the compiler plugin checks in the IrGeneration Phase for the @DebugLog annotation. Then it [rewrites the body the function](https://github.com/Foso/DebugLog/blob/6152ffe4a516010a029c2956f8f1ae878712030e/buildSrc/kotlin-plugin/src/main/java/de/jensklingenberg/debuglog/DebugLogTransformer.kt#L90). 
 
-The function:
-
-```kotlin
-@DebugLog
-fun doSomething(name: String, age: Int, isLoggedIn: Boolean = false) {
-    //Do something
-}
-```
-
-will be rewritten to:
-
-```kotlin
-@DebugLog
-fun doSomething(name: String, age: Int, isLoggedIn: Boolean = false) {
-    kotlin.io.println("doSomething() name: $name age: $age isLoggedIn: $isLoggedIn"
-    //Do something
-}
-```
-
-In Android builds it will use **Log.d** instead of **println**
-
-This rewrite will only happen inside the compiler plugin at compile time. No .kt/source files will be changed.
 
 ### 👷 Project Structure
 * <kbd>androidSample</kbd> - A basic Android app that is using the debuglog compiler plugin
@@ -192,11 +170,6 @@ This rewrite will only happen inside the compiler plugin at compile time. No .kt
  *  <kbd>gradle-plugin</kbd> - This module contains the gradle plugin which trigger the two compiler plugins
  *  <kbd>annotations</kbd> - This module contains the debuglog annotations
 
-## Usage
-For now the plugin only exists in this project. Maybe i will upload it to MavenCentral, when i make some more changes.
-
-If you want to try it you can:
-Run the Android app inside androidSample or run the main() inside /src
 
 ### Find this project useful ? :heart:
 * Support it by clicking the :star: button on the upper right of this page. :v:
