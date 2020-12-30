@@ -31,7 +31,7 @@ fun main(){
 }
 ```
 
-It will log:
+It will automatically log:
 ```kotlin
 Example -> exampleFun( first= Jens, last= Klingenberg, age= 31, isLoggedIn= false)
 Example <- exampleFun() [2.63ms] =  Jens Klingenberg
