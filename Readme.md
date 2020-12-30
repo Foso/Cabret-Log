@@ -98,7 +98,7 @@ You can add dependency to the required module right to the common source set:
 ```gradle
 commonMain {
     dependencies {
-        implementation "de.jensklingenberg.cabret:cabret-log:$cabretVersion"
+        implementation "de.jensklingenberg.cabret:cabret-log:1.0.3"
     }
 }
 ```
