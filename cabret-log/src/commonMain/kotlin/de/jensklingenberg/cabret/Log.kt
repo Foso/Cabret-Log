@@ -2,63 +2,34 @@ package de.jensklingenberg.cabret
 
 import kotlin.native.concurrent.ThreadLocal
 
-
-@Target(AnnotationTarget.FUNCTION)
-annotation class DebugLog(val logLevel: Cabret.LogLevel = Cabret.LogLevel.DEBUG,val tag:String="")
-
 @ThreadLocal
 object LogHandler {
 
+    private var logger: Cabret.Logger = DefaultLogger()
 
-    private var listener: Cabret.Listener = DefaultListener()
-
+    /**
+     * This function is used by the compiler plugin to log the method call
+     * Needs to be public
+     */
     fun onLog(tag: String, name: String, logLevel: String) {
         val serv = Cabret.LogLevel.valueOf(logLevel)
-        listener.log(tag,  name, serv)
+        logger.log(LogData(tag, name, serv))
     }
 
-    fun addListener(listener: Cabret.Listener) {
-        this.listener = listener
+    fun addLogger(logger: Cabret.Logger) {
+        this.logger = logger
     }
 
     /**
-     * This is used to log the retun values
+     * This is used to log the return values
      */
     fun <T> logReturn(tag: String, returnObject: T, logLevel: String): T {
-        onLog(tag,  returnObject.toString(), logLevel)
+        onLog(tag, returnObject.toString(), logLevel)
         return returnObject
     }
 
-    fun removeListener() {
-        listener = DefaultListener()
+    fun removeLogger() {
+        logger = DefaultLogger()
     }
 }
 
-expect class DefaultListener() : Cabret.Listener {
-    override fun log(tag: String, msg: String, logLevel: Cabret.LogLevel)
-}
-
-class CommonListener : Cabret.Listener {
-    override fun log(tag: String, msg: String, logLevel: Cabret.LogLevel) {
-        println(tag + " " + msg)
-    }
-}
-
-object Cabret {
-
-    enum class LogLevel {
-        VERBOSE, DEBUG, INFO, WARN, ERROR
-    }
-
-    interface Listener {
-        fun log(tag: String, msg: String, logLevel: Cabret.LogLevel)
-    }
-
-    fun addListener(listener: Cabret.Listener) {
-        LogHandler.addListener(listener)
-    }
-
-    fun removeListener() {
-        LogHandler.removeListener()
-    }
-}

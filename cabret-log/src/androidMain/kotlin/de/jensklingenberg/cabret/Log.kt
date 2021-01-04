@@ -2,23 +2,23 @@ package de.jensklingenberg.cabret
 
 import android.util.Log
 
-class AndroidListener : Cabret.Listener {
-    override fun log(tag: String, msg: String, logLevel: Cabret.LogLevel) {
-        when (logLevel) {
+class AndroidListener : Cabret.Logger {
+    override fun log(data: LogData) {
+        when (data.logLevel) {
             Cabret.LogLevel.VERBOSE -> {
-                Log.v(tag, msg)
+                Log.v(data.tag, data.msg)
             }
             Cabret.LogLevel.DEBUG -> {
-                Log.d(tag, msg)
+                Log.d(data.tag, data.msg)
             }
             Cabret.LogLevel.INFO -> {
-                Log.i(tag, msg)
+                Log.i(data.tag, data.msg)
             }
             Cabret.LogLevel.WARN -> {
-                Log.w(tag, msg)
+                Log.w(data.tag, data.msg)
             }
             Cabret.LogLevel.ERROR -> {
-                Log.e(tag, msg)
+                Log.e(data.tag, data.msg)
             }
         }
     }
@@ -26,4 +26,3 @@ class AndroidListener : Cabret.Listener {
 
 }
 
-actual typealias DefaultListener = AndroidListener
