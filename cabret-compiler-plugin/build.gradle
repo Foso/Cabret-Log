@@ -10,7 +10,7 @@ plugins {
 
 apply plugin: "kotlin-kapt"
 
-def pluginVersion = "1.0.2"
+def pluginVersion = "1.0.4"
 
 
 group = "de.jensklingenberg.cabret"

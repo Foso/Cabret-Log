@@ -6,7 +6,7 @@ apply plugin: 'de.jensklingenberg.cabret'
 
 cabret {
     enabled = true
-    version = "1.0.2"
+    version = "1.0.4"
 }
 
 System.setProperty("kotlin.compiler.execution.strategy", "in-process") // For debugging
@@ -26,7 +26,7 @@ allprojects {
 allprojects {
 
     repositories {
-
+        mavenLocal()
         mavenCentral()
         maven { url "https://maven.google.com" }
         maven { url "https://plugins.gradle.org/m2/" }
@@ -65,7 +65,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation kotlin('stdlib-common')
-                implementation "de.jensklingenberg.cabret:cabret-log:1.0.2"
+                implementation "de.jensklingenberg.cabret:cabret-log:1.0.4"
 
             }
         }
@@ -92,6 +92,8 @@ kotlin {
         jvmMain {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+                implementation "de.jensklingenberg.cabret:cabret-log-jvm:1.0.4"
+
 
             }
         }

@@ -7,7 +7,6 @@ fun main() {
 
 }
 
-@DebugLog
 fun test(){
 
 }

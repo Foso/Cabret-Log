@@ -14,7 +14,7 @@ apply plugin: "kotlin-kapt"
 
 group = "de.jensklingenberg.cabret"
 archivesBaseName = "cabret-gradle"
-version = "1.0.3"
+version = "1.0.4"
 
 repositories {
     mavenLocal()
