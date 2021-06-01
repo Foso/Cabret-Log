@@ -2,16 +2,18 @@ package de.jensklingenberg
 
 import de.jensklingenberg.cabret.Cabret
 import de.jensklingenberg.cabret.DebugLog
+import de.jensklingenberg.cabret.LogData
 import test.commonLog
 
 
 fun main() {
-    Cabret.addListener(object :Cabret.Listener{
-        override fun log(tag: String, msg: String, logLevel: Cabret.LogLevel) {
-            console.log(msg)
+    Cabret.addLogger(object :Cabret.Logger{
+
+        override fun log(data: LogData) {
+            console.log(data.msg)
         }
     })
-    logit("dddd")
+    logit("Hello World")
     commonLog("Hallo")
 }
 

@@ -1,15 +1,14 @@
 import org.gradle.api.publish.maven.MavenPublication
 plugins {
-    id("maven")
-    id("maven-publish")
     id 'signing'
-    id "com.vanniktech.maven.publish"
     id("org.jetbrains.dokka")
-
+    id 'org.jetbrains.kotlin.multiplatform'
+    id 'maven-publish'
 }
-
-apply plugin: 'kotlin-multiplatform'
 apply plugin: 'com.android.library'
+
+group = 'de.jensklingenberg.cabret'
+version = '1.0.4'
 
 repositories {
     google()
@@ -18,7 +17,6 @@ repositories {
 }
 
 kotlin {
-
     jvm()
     js(IR) {
         browser()
@@ -30,6 +28,7 @@ kotlin {
         publishLibraryVariants("release", "debug")
     }
 
+    macosX64("macOS")
     ios('ios') {
         binaries {
             framework {
@@ -37,6 +36,10 @@ kotlin {
             }
         }
     }
+
+    watchos()
+    tvos()
+
     sourceSets {
         commonMain {
             dependencies {
@@ -65,7 +68,7 @@ kotlin {
 
         jvmMain {
             dependencies {
-                implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.10"
             }
         }
         jsTest {
@@ -73,9 +76,12 @@ kotlin {
                 implementation kotlin('test-js')
             }
         }
-        androidMain {}
 
         iosMain {
+
+        }
+
+        watchMain{
 
         }
 
@@ -86,7 +92,7 @@ kotlin {
 android {
     compileSdkVersion 30
     defaultConfig {
-        minSdkVersion 21
+        minSdkVersion 16
         targetSdkVersion 30
         versionCode 1
         versionName '1.0.4'

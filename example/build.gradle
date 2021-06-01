@@ -91,9 +91,7 @@ kotlin {
 
         jvmMain {
             dependencies {
-                implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-                implementation "de.jensklingenberg.cabret:cabret-log-jvm:1.0.4"
-
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.10"
 
             }
         }

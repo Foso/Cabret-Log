@@ -23,7 +23,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly "org.jetbrains.kotlin:kotlin-compiler-embeddable"
+    compileOnly "org.jetbrains.kotlin:kotlin-compiler-embeddable:1.5.10"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib"
     implementation "de.jensklingenberg.cabret:cabret-log-jvm:1.0.4"
 
