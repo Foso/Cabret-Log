@@ -16,7 +16,7 @@ repositories {
 
     gradlePluginPortal()
     google()
-    jcenter()
+
 
 
     mavenCentral()
@@ -41,7 +41,7 @@ kotlin {
     sourceSets {
         val commonMain by getting{
             dependencies {
-                implementation("de.jensklingenberg.cabret:cabret-log:1.0.4")
+                implementation("de.jensklingenberg.cabret:cabret-log:1.0.4-RC2")
             }
         }
         val commonTest by getting {
@@ -67,11 +67,11 @@ kotlin {
 }
 
 android {
-    compileSdkVersion(29)
+    compileSdkVersion(30)
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
-        minSdkVersion(24)
-        targetSdkVersion(29)
+        minSdkVersion(16)
+        targetSdkVersion(30)
     }
 }
 

@@ -2,7 +2,7 @@ package de.jensklingenberg.cabret.cabretdemo.shared
 
 import de.jensklingenberg.cabret.Cabret
 import de.jensklingenberg.cabret.DebugLog
-import de.jensklingenberg.cabret.LogData
+
 
 
 class Greeting {

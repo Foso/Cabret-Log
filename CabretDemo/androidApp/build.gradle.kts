@@ -5,7 +5,6 @@ plugins {
 repositories {
     gradlePluginPortal()
     google()
-    jcenter()
     mavenLocal()
     mavenCentral()
 }
@@ -17,11 +16,11 @@ dependencies {
 }
 
 android {
-    compileSdkVersion(29)
+    compileSdkVersion(30)
     defaultConfig {
         applicationId = "de.jensklingenberg.cabret.cabretdemo.androidApp"
         minSdkVersion(24)
-        targetSdkVersion(29)
+        targetSdkVersion(30)
         versionCode = 1
         versionName = "1.0"
     }
@@ -32,10 +31,3 @@ android {
     }
 }
 
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
-        useIR = true
-    }
-}

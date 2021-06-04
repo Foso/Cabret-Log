@@ -1,25 +1,37 @@
+import org.gradle.internal.impldep.org.bouncycastle.asn1.iana.IANAObjectIdentifiers.mail
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
-    id("maven-publish")
+    `maven-publish`
+    maven
+    id("org.jetbrains.dokka")
+    signing
 }
-
-version = "1.0"
+group = "de.jensklingenberg.cabret"
+version = "1.0.4-RC2"
 
 kotlin {
-    android()
 
-    val iosTarget: (String, KotlinNativeTarget.() -> Unit) -> KotlinNativeTarget =
-        if (System.getenv("SDK_NAME")?.startsWith("iphoneos") == true)
-            ::iosArm64
-        else
-            ::iosX64
+    android() {
+        publishLibraryVariants("release", "debug")
+    }
+    js(IR){
 
-    iosTarget("ios") {}
-
-    
+    }
+    ios() {
+        binaries {
+            framework {
+                baseName = "library"
+            }
+        }
+    }
+    jvm()
+    linuxX64("linux")
+    macosX64("macOS")
+    watchos()
+    tvos()
     sourceSets {
         val commonMain by getting
         val commonTest by getting {
@@ -39,12 +51,93 @@ kotlin {
         val iosTest by getting
     }
 }
+val javadocJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("javadoc")
+}
 
 android {
     compileSdkVersion(30)
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    sourceSets["main"].apply {
+        manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    }
+
     defaultConfig {
-        minSdkVersion(23)
+        minSdkVersion(16)
         targetSdkVersion(30)
     }
+}
+
+signing {
+    setRequired(provider { gradle.taskGraph.hasTask("publish") })
+    sign(publishing.publications)
+}
+
+
+
+publishing {
+
+    repositories {
+        if (
+            hasProperty("sonatypeUsername") &&
+            hasProperty("sonatypePassword") &&
+            hasProperty("sonatypeSnapshotUrl") &&
+            hasProperty("sonatypeReleaseUrl")
+        ) {
+            maven {
+                val url = when {
+                    "SNAPSHOT" in version.toString() -> property("sonatypeSnapshotUrl")
+                    else -> property("sonatypeReleaseUrl")
+                } as String
+                setUrl(url)
+                credentials {
+                    username = property("sonatypeUsername") as String
+                    password = property("sonatypePassword") as String
+                }
+            }
+        }
+        maven {
+            name = "buildfolder"
+            setUrl("file://${rootProject.buildDir}/localMaven")
+        }
+
+        maven {
+            name = "mavCentral"
+            setUrl("https://oss.sonatype.org/service/local/staging/deploy/maven2")
+            credentials {
+                username = properties["mavenCentralUsername"].toString()
+                password = properties["mavenCentralPassword"].toString()
+            }
+        }
+    }
+
+    publications.withType<MavenPublication>{
+// Stub javadoc.jar artifact
+        artifact(javadocJar.get())
+            pom {
+                name.set(project.name)
+                description.set("Method call logging for Kotlin Multiplatform ")
+                url.set("https://github.com/Foso/Cabret-Log")
+
+                licenses {
+                    license {
+                        name.set("Apache License 2.0")
+                        url.set("https://github.com/Foso/Cabret-Log/blob/master/LICENSE")
+                    }
+                }
+                scm {
+                    url.set("https://github.com/Foso/Cabret-Log")
+                    connection.set("scm:git://github.com/Foso/Cabret-Log.git")
+                }
+                developers {
+                    developer {
+                        id.set("Foso")
+                        name.set("Jens Klingenberg")
+                        email.set("mail@jensklingenberg.de")
+                    }
+                }
+            }
+
+    }
+
+
 }

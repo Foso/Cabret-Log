@@ -3,7 +3,7 @@ buildscript {
         mavenLocal()
 
         gradlePluginPortal()
-        jcenter()
+
         google()
         mavenCentral()
     }
@@ -19,7 +19,6 @@ allprojects {
     repositories {
         mavenLocal()
         google()
-        jcenter()
         mavenCentral()
     }
 }

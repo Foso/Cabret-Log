@@ -65,7 +65,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation kotlin('stdlib-common')
-                implementation "de.jensklingenberg.cabret:cabret-log:1.0.4"
+                implementation "de.jensklingenberg.cabret:cabret-log:1.0.4-RC"
 
             }
         }
