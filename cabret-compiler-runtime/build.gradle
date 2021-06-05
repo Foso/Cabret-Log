@@ -2,9 +2,10 @@ plugins {
     id 'org.jetbrains.kotlin.jvm'
     id 'maven-publish'
     id("org.jetbrains.dokka")
-    id "com.vanniktech.maven.publish"
-    id 'com.gradle.plugin-publish' version '0.11.0'
     id("maven")
+    id 'signing'
+    id 'io.codearte.nexus-staging' version '0.21.0'
+    id("com.bmuschko.nexus")
 
 }
 
@@ -25,7 +26,7 @@ repositories {
 dependencies {
     compileOnly "org.jetbrains.kotlin:kotlin-compiler-embeddable:1.5.10"
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib"
-    implementation "de.jensklingenberg.cabret:cabret-log-jvm:1.0.4-RC"
+    implementation "de.jensklingenberg.cabret:cabret-log-jvm:1.0.4"
 
     testImplementation("org.jetbrains.kotlin:kotlin-compiler-embeddable")
     testImplementation("com.github.tschuchortdev:kotlin-compile-testing:1.3.3")
@@ -36,6 +37,8 @@ dependencies {
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
+
+
 
 
 build {
@@ -49,15 +52,48 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
     }
 }
 
-mavenPublish {
-    targets {
-        // Modify the existing uploadArchives task
-        uploadArchives {
-            // stagingProfile = "de.jensklingenberg" // defaults to the SONATYPE_STAGING_PROFILE Gradle property or the GROUP Gradle Property if not set
-            releaseRepositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-            snapshotRepositoryUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
 
+modifyPom {
+    project {
+        name 'CabretLog'
+        description 'Kotlin Native/JS/JVM Annotation Processor library'
+        url 'https://github.com/Foso/Cabret-Log'
+        inceptionYear '2020'
+        scm {
+            url 'https://github.com/Foso/Cabret-Log'
+            connection 'scm:https://github.com/Foso/Cabret-Log.git'
+            developerConnection 'scm:git://github.com/Foso/Cabret-Log.git'
         }
-
+        licenses {
+            license {
+                name 'The Apache Software License, Version 2.0'
+                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                distribution 'repo'
+            }
+        }
+        developers {
+            developer {
+                id 'Foso'
+                name 'Jens Klingenberg'
+                email 'mail@jensklingenberg.de'
+            }
+        }
     }
+}
+
+
+extraArchive {
+    sources = true
+    tests = true
+    javadoc = true
+}
+nexus {
+    sign = true
+    repositoryUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+    snapshotRepositoryUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+}
+
+nexusStaging {
+    packageGroup = "de.jensklingenberg" //optional if packageGroup == project.getGroup()
+    stagingProfileId = "d56228753311b0" //when not defined will be got from server using "packageGroup"
 }

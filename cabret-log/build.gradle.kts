@@ -10,7 +10,7 @@ plugins {
     signing
 }
 group = "de.jensklingenberg.cabret"
-version = "1.0.4-RC2"
+version = "1.0.4"
 
 kotlin {
 

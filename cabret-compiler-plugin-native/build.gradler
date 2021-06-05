@@ -3,11 +3,10 @@ plugins {
     id 'org.jetbrains.kotlin.jvm'
     id 'maven-publish'
     id("org.jetbrains.dokka")
-    id "com.vanniktech.maven.publish"
     id "com.github.johnrengelman.shadow" version "6.1.0"
 }
 
-def pluginVersion = "1.0.4-RC7"
+def pluginVersion = "1.0.4"
 
 apply plugin: "kotlin-kapt"
 
@@ -22,10 +21,6 @@ install {
         pom.artifactId = archivesBaseName
     }
 }
-
-install{
-    dependsOn(shadowJar)
-}
 repositories {
     mavenLocal()
 }
@@ -35,8 +30,8 @@ compileKotlin {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
     compileOnly "org.jetbrains.kotlin:kotlin-compiler"
-    compileOnly "com.google.auto.service:auto-service:1.0-rc7"
-    kapt "com.google.auto.service:auto-service:1.0-rc7"
+    compileOnly "com.google.auto.service:auto-service:1.0"
+    kapt "com.google.auto.service:auto-service:1.0"
     implementation project(':cabret-compiler-runtime')
 }
 
@@ -67,8 +62,13 @@ shadowJar {
     classifier = ""
 }
 
-//Install uploadarchives
+kapt {
+    includeCompileClasspath = true
+}
 
+install{
+    dependsOn(shadowJar)
+}
 
 build{
     dependsOn ':cabret-compiler-runtime:install'

@@ -9,7 +9,7 @@ plugins {
 
 configure<de.jensklingenberg.gradle.CabretGradleExtension> {
     enabled = true
-    version = "1.0.4"
+    version = "1.0.4-RC7"
 }
 
 repositories {
@@ -41,7 +41,8 @@ kotlin {
     sourceSets {
         val commonMain by getting{
             dependencies {
-                implementation("de.jensklingenberg.cabret:cabret-log:1.0.4-RC2")
+                implementation("de.jensklingenberg.cabret:cabret-log:1.0.4")
+
             }
         }
         val commonTest by getting {
