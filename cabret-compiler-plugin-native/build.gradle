@@ -7,7 +7,7 @@ plugins {
     id "com.github.johnrengelman.shadow" version "6.1.0"
 }
 
-def pluginVersion = "1.0.4-RC7"
+def pluginVersion = "1.0.4-RC8"
 
 apply plugin: "kotlin-kapt"
 

@@ -9,7 +9,7 @@ plugins {
 
 configure<de.jensklingenberg.gradle.CabretGradleExtension> {
     enabled = true
-    version = "1.0.4-RC7"
+    version = "1.0.4-RC8"
 }
 
 repositories {
