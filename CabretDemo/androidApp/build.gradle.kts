@@ -5,7 +5,7 @@ plugins {
 repositories {
     gradlePluginPortal()
     google()
-    mavenLocal()
+    //mavenLocal()
     mavenCentral()
 }
 dependencies {
@@ -19,7 +19,7 @@ android {
     compileSdkVersion(30)
     defaultConfig {
         applicationId = "de.jensklingenberg.cabret.cabretdemo.androidApp"
-        minSdkVersion(24)
+        minSdkVersion(16)
         targetSdkVersion(30)
         versionCode = 1
         versionName = "1.0"

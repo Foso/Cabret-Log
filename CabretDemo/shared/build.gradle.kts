@@ -9,16 +9,13 @@ plugins {
 
 configure<de.jensklingenberg.gradle.CabretGradleExtension> {
     enabled = true
-    version = "1.0.4-RC8"
+    version = "1.0.4"
 }
 
 repositories {
 
     gradlePluginPortal()
     google()
-
-
-
     mavenCentral()
 }
 
@@ -27,7 +24,6 @@ kotlin {
         tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
             kotlinOptions {
                 jvmTarget = JavaVersion.VERSION_1_8.toString()
-                useIR = true
             }
         }
     }

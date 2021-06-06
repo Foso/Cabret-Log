@@ -1,4 +1,7 @@
-1.0.4 (not yet relased)
+1.0.5 (not yet relased)
+========================================
+
+1.0.4 
 ========================================
 - renamed Cabret.Listener to Cabret.Logger
 - replaced "override fun log(tag: String, msg: String, logLevel: Cabret.LogLevel)" with

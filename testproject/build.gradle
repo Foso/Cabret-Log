@@ -33,7 +33,6 @@ allprojects {
         google()
         jcenter()
 
-
     }
 }
 
@@ -52,12 +51,11 @@ kotlin {
         binaries.executable()
 
     }
+    macosX64("macOS"){
+        binaries.executable()
+    }
     linuxX64("linux") {
-        configure([compilations.main]) {
-            tasks.getByName(compileKotlinTaskName).kotlinOptions {
-
-            }
-        }
+        binaries.executable()
     }
 
 
