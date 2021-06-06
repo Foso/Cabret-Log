@@ -1,0 +1,125 @@
+
+apply plugin: 'java'
+apply plugin: 'kotlin-multiplatform'
+
+apply plugin: 'de.jensklingenberg.cabret'
+
+cabret {
+    enabled = true
+    version = "1.0.4-RC7"
+}
+
+System.setProperty("kotlin.compiler.execution.strategy", "in-process") // For debugging
+
+allprojects {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        google()
+
+        maven { url "https://maven.google.com" }
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+}
+
+
+allprojects {
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://maven.google.com" }
+        maven { url "https://plugins.gradle.org/m2/" }
+        google()
+        jcenter()
+
+    }
+}
+
+
+kotlin {
+    jvm(){
+        configure([compilations.main]) {
+            tasks.getByName(compileKotlinTaskName).kotlinOptions {
+                useIR = true
+            }
+        }
+    }
+    js(IR) {
+        nodejs {
+        }
+        binaries.executable()
+
+    }
+    macosX64("macOS"){
+        binaries.executable()
+    }
+    linuxX64("linux") {
+        binaries.executable()
+    }
+
+
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation kotlin('stdlib-common')
+                implementation "de.jensklingenberg.cabret:cabret-log:1.0.4"
+
+            }
+        }
+        commonTest {
+            dependencies {
+                implementation kotlin('test-common')
+                implementation kotlin('test-annotations-common')
+
+            }
+        }
+
+        jsMain {
+            dependencies {
+                implementation kotlin('stdlib-js')
+
+            }
+        }
+        jsTest {
+            dependencies {
+                implementation kotlin('test-js')
+            }
+        }
+
+        jvmMain {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.10"
+
+            }
+        }
+        jvmTest {
+            dependencies {
+                //  implementation kotlin('test-junit')
+                implementation group: 'junit', name: 'junit', version: '4.4'
+            }
+        }
+
+        linuxMain {
+            dependencies {
+               // implementation "de.jensklingenberg.cabret:cabret-log-linux:1.0.1"
+
+
+            }
+
+        }
+        linuxTest {
+        }
+
+    }
+}
+
+build {
+    dependsOn ':cabret-log:build'
+
+   // dependsOn ':cabret-compiler-plugin:build'
+
+}
+
+
+//./gradlew :clean :build --no-daemon -Dorg.gradle.debug=true -Dkotlin.compiler.execution.strategy="in-process" -Dkotlin.daemon.jvm.options="-Xdebug,-Xrunjdwp:transport=dt_socket\,address=5005\,server=y\,suspend=n"

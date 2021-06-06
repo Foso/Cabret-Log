@@ -2,15 +2,14 @@ plugins {
     id("maven")
     id 'org.jetbrains.kotlin.jvm'
     id 'maven-publish'
-    id 'signing'
     id("org.jetbrains.dokka")
     id "com.vanniktech.maven.publish"
     id "com.github.johnrengelman.shadow" version "6.1.0"
 }
 
-apply plugin: "kotlin-kapt"
+def pluginVersion = "1.0.4"
 
-def pluginVersion = "1.0.2"
+apply plugin: "kotlin-kapt"
 
 
 group = "de.jensklingenberg.cabret"
@@ -18,24 +17,29 @@ archivesBaseName = "cabret-compiler-plugin"
 version = pluginVersion
 
 
+install {
+    repositories.mavenInstaller {
+        pom.artifactId = archivesBaseName
+    }
+}
+
+install{
+    dependsOn(shadowJar)
+}
 repositories {
     mavenLocal()
 }
-
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib"
-    implementation project(':cabret-compiler-runtime')
-    compileOnly "org.jetbrains.kotlin:kotlin-compiler-embeddable"
-    compileOnly "com.google.auto.service:auto-service:1.0-rc7"
-    kapt "com.google.auto.service:auto-service:1.0-rc7"
-}
-
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
-compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    compileOnly "org.jetbrains.kotlin:kotlin-compiler-embeddable"
+    compileOnly "com.google.auto.service:auto-service:1.0-rc7"
+    kapt "com.google.auto.service:auto-service:1.0-rc7"
+    implementation project(':cabret-compiler-runtime')
 }
+
 
 task fatJar(type: Jar) {
     manifest {
@@ -43,7 +47,7 @@ task fatJar(type: Jar) {
                 'Implementation-Version': version,
                 'Main-Class': 'de.jensklingenberg.cabret.PluginComponentRegistrar'
     }
-    baseName = "cabret-compiler-plugin"
+    baseName = archivesBaseName
     version = pluginVersion
 
     from {
@@ -58,23 +62,17 @@ shadowJar {
     manifest {
         inheritFrom project.tasks.fatJar.manifest
     }
-    baseName = "cabret-compiler-plugin"
+    baseName = archivesBaseName
     version = pluginVersion
     classifier = ""
-
 }
 
-kapt {
-    includeCompileClasspath = true
-}
+//Install uploadarchives
 
-install{
-    dependsOn(shadowJar)
-}
 
 build{
     dependsOn ':cabret-compiler-runtime:install'
-    dependsOn(install)
+    dependsOn(shadowJar)
     finalizedBy(publishToMavenLocal)
 }
 
@@ -84,5 +82,3 @@ task JavadocsJar(type: Jar) {
     classifier = 'javadoc'
     from "$buildDir/javadoc"
 }
-
-

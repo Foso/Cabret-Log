@@ -7,7 +7,7 @@ plugins {
     id "com.github.johnrengelman.shadow" version "6.1.0"
 }
 
-def pluginVersion = "1.0.2"
+def pluginVersion = "1.0.4"
 
 apply plugin: "kotlin-kapt"
 
@@ -21,6 +21,10 @@ install {
     repositories.mavenInstaller {
         pom.artifactId = archivesBaseName
     }
+}
+
+install{
+    dependsOn(shadowJar)
 }
 repositories {
     mavenLocal()
@@ -63,13 +67,8 @@ shadowJar {
     classifier = ""
 }
 
-kapt {
-    includeCompileClasspath = true
-}
+//Install uploadarchives
 
-install{
-    dependsOn(shadowJar)
-}
 
 build{
     dependsOn ':cabret-compiler-runtime:install'

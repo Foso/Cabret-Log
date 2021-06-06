@@ -1,6 +1,6 @@
 
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.4.21'
+    id 'org.jetbrains.kotlin.jvm' version '1.5.10'
     id 'com.gradle.plugin-publish' version '0.11.0'
     id 'signing'
     id "com.vanniktech.maven.publish" version '0.13.0'
@@ -14,7 +14,7 @@ apply plugin: "kotlin-kapt"
 
 group = "de.jensklingenberg.cabret"
 archivesBaseName = "cabret-gradle"
-version = "1.0.3"
+version = "1.0.4"
 
 repositories {
     mavenLocal()
@@ -40,7 +40,7 @@ gradlePlugin {
 
 dependencies {
 
-    implementation "org.jetbrains.kotlin:kotlin-gradle-plugin-api:1.4.21"
+    implementation "org.jetbrains.kotlin:kotlin-gradle-plugin-api:1.5.10"
 
 }
 

@@ -11,9 +11,9 @@ object LogHandler {
      * This function is used by the compiler plugin to log the method call
      * Needs to be public
      */
-    fun onLog(tag: String, name: String, logLevel: String) {
+    fun onLog(tag: String, msg: String, logLevel: String) {
         val serv = Cabret.LogLevel.valueOf(logLevel)
-        logger.log(LogData(tag, name, serv))
+        logger.log(LogData(tag, msg, serv))
     }
 
     fun addLogger(logger: Cabret.Logger) {
@@ -23,8 +23,8 @@ object LogHandler {
     /**
      * This is used to log the return values
      */
-    fun <T> logReturn(tag: String, returnObject: T, logLevel: String): T {
-        onLog(tag, returnObject.toString(), logLevel)
+    fun <T> logReturn(tag: String, returnObject: T, logLevel: String,executionTime: String): T {
+        onLog(tag+" "+executionTime, returnObject.toString(), logLevel)
         return returnObject
     }
 

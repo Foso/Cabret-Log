@@ -8,7 +8,11 @@ import org.jetbrains.kotlin.ir.builders.IrGeneratorContext
 import org.jetbrains.kotlin.ir.declarations.IrFile
 import org.jetbrains.kotlin.ir.expressions.IrExpression
 import org.jetbrains.kotlin.ir.expressions.impl.IrCallImpl
+import org.jetbrains.kotlin.ir.symbols.IrClassSymbol
+import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
 import org.jetbrains.kotlin.ir.symbols.IrSymbol
+import org.jetbrains.kotlin.ir.util.IdSignature
+import org.jetbrains.kotlin.ir.util.functions
 import org.jetbrains.kotlin.ir.visitors.IrElementVisitorVoid
 import org.jetbrains.kotlin.ir.visitors.acceptChildrenVoid
 import org.jetbrains.kotlin.ir.visitors.acceptVoid
@@ -37,4 +41,9 @@ fun IrCallImpl.valueArgumentsList(): List<IrExpression> {
     return (0 until valueArgumentsCount).map {
         getValueArgument(it)
     }.filterNotNull()
+}
+
+fun IrClassSymbol.getFunctions(name: String): List<IrSimpleFunctionSymbol> {
+    return functions.toList()
+        .filter { (it.signature as IdSignature.PublicSignature).declarationFqName.substringAfterLast(".") == name }
 }
