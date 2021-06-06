@@ -72,6 +72,7 @@ plugins {
 
 configure<de.jensklingenberg.gradle.CabretGradleExtension> {
     enabled = true
+    version = 1.0.4
 }
 ```       
 
@@ -84,6 +85,7 @@ plugins {
 
 cabret {
     enabled = true
+    version = 1.0.4
 }
 ```
 
@@ -98,7 +100,7 @@ You can add dependency to the right to the common source set:
 ```gradle
 commonMain {
     dependencies {
-        implementation "de.jensklingenberg.cabret:cabret-log:1.0.3"
+        implementation "de.jensklingenberg.cabret:cabret-log:1.0.4"
     }
 }
 ```
@@ -110,7 +112,7 @@ You can also add platform-specific dependecies
 sourceSets {
     jvmMain {
             dependencies {
-                 implementation "de.jensklingenberg.cabret:cabret-log-jvm:1.0.3"
+                 implementation "de.jensklingenberg.cabret:cabret-log-jvm:1.0.4"
             }
    }
 }
@@ -118,7 +120,7 @@ sourceSets {
 
 Here's a list of all available targets:
 ```gradle
-def cabretVersion = "1.0.3"
+def cabretVersion = "1.0.4"
 
 implementation "de.jensklingenberg.cabret:cabret-log-jvm:$cabretVersion"
 implementation "de.jensklingenberg.cabret:cabret-log-js:$cabretVersion"
@@ -126,6 +128,12 @@ implementation "de.jensklingenberg.cabret:cabret-log-android:$cabretVersion"
 implementation "de.jensklingenberg.cabret:cabret-log-iosx64:$cabretVersion"
 implementation "de.jensklingenberg.cabret:cabret-log-iosarm64:$cabretVersion"
 implementation "de.jensklingenberg.cabret:cabret-log-linux:$cabretVersion"
+implementation "de.jensklingenberg.cabret:cabret-log-macos:$cabretVersion"
+implementation "de.jensklingenberg.cabret:cabret-log-watchosarm32:$cabretVersion"
+implementation "de.jensklingenberg.cabret:cabret-log-watchosarm64:$cabretVersion"
+implementation "de.jensklingenberg.cabret:cabret-log-tvosarm32:$cabretVersion"
+implementation "de.jensklingenberg.cabret:cabret-log-tvosarm64:$cabretVersion"
+
 
 ```
 
@@ -169,13 +177,14 @@ You can set a LogLevel to the DebugLog Annotation. You can choose between VERBOS
 ### Custom Logger
 By default Cabret will log the data with printLn() or on Android with android.util.Log and the selected LogLevel. E.g. LogLevel.ERROR will be logged with Log.e(), LogLevel.INFO will be logged with Log.i(), etc. 
 
-You can add your own Logger. All you need to do is to add your object of Cabret.Listener to Cabret.addListener() somewhere at the beginning of your programm.
+You can add your own Logger. All you need to do is to add your object of Cabret.Logger to Cabret.addLogger() somewhere at the beginning of your programm.
 
 ```kotlin
-Cabret.addListener(object :Cabret.Listener{
-    override fun log(tag: String, msg: String, logLevel: Cabret.LogLevel) {
-        //Add your logger here
-    }
+Cabret.addLogger(object : Cabret.Logger {
+            override fun log(data: LogData) {
+                //Add your logger here
+                println(data.tag + " " + data.msg)
+            }
 })
 ```
 
