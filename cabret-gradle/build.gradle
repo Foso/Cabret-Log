@@ -4,7 +4,7 @@ plugins {
     id 'com.gradle.plugin-publish' version '0.11.0'
     id 'signing'
     id "com.vanniktech.maven.publish" version '0.13.0'
-    id("maven")
+    id("maven-publish")
     id("org.jetbrains.dokka") version '1.4.20'
 
 }
@@ -19,13 +19,21 @@ version = "1.0.4"
 repositories {
     mavenLocal()
     google()
-    jcenter()
     mavenCentral()
 }
 
-install {
-    repositories.mavenInstaller {
-        pom.artifactId = archivesBaseName
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = group
+            artifactId = archivesBaseName
+            version = version
+
+            from components.java
+        }
+    }
+    repositories {
+
     }
 }
 
@@ -62,6 +70,6 @@ pluginBundle {
 
 
 
-build.finalizedBy(install)
+build.finalizedBy(publishToMavenLocal)
 
 
